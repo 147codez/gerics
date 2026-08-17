@@ -14,9 +14,9 @@ export default function Gallery({
       <div className="gallery" aria-hidden>
         {[
           [4, 3],
-          [3, 4],
-          [1, 1],
-          [16, 9],
+          [4, 3],
+          [4, 3],
+          [4, 3],
         ].map(([w, h], i) => (
           <figure key={i}>
             <div
