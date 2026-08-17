@@ -39,6 +39,17 @@ export default function UeberUns() {
           </div>
         </div>
 
+        {/* Persönliche Geschichte */}
+        <div className="mt-16">
+          <h2 className="font-serif text-3xl text-gold sm:text-4xl">{d.storyTitle}</h2>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/geri2.jpg"
+            alt={d.storyAlt}
+            className="mt-6 w-full max-w-lg rounded-2xl border border-line shadow-[0_24px_60px_rgba(0,0,0,0.4)]"
+          />
+        </div>
+
         {/* Kontaktformular unter dem Text */}
         <div
           id="kontakt"

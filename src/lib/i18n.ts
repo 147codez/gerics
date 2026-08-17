@@ -36,6 +36,8 @@ type Dict = {
     p2: string;
     p3: string;
     portraitAlt: string;
+    storyTitle: string;
+    storyAlt: string;
     contactTitle: string;
     contactText: string;
     form: {
@@ -102,6 +104,8 @@ export const dict: Record<Lang, Dict> = {
       p2: "Mich interessiert der Moment, nicht der Aufwand danach. Am fertigen Bild drehe ich höchstens ein wenig an Sättigung und Kontrast, mehr braucht es selten.",
       p3: "Und ehrlich gesagt: für RAW bin ich zu faul. Was zählt, ist das Bild, das bleibt, nicht die Stunden davor am Bildschirm.",
       portraitAlt: "Porträt von Geri",
+      storyTitle: "Niemals vergessen, wer du bist.",
+      storyAlt: "Zeitungsartikel über Mahmoud Geri Geranmayeh",
       contactTitle: "Kontakt",
       contactText: "Schreiben Sie mir, ich melde mich persönlich zurück.",
       form: {
@@ -206,6 +210,8 @@ export const dict: Record<Lang, Dict> = {
       p2: "I care about the moment, not the work afterwards. On the finished image I'll nudge the saturation and contrast a little at most, rarely more.",
       p3: "And honestly: I'm too lazy for RAW. What counts is the image that lasts, not the hours in front of a screen.",
       portraitAlt: "Portrait of Geri",
+      storyTitle: "Never forget who you are.",
+      storyAlt: "Newspaper article about Mahmoud Geri Geranmayeh",
       contactTitle: "Contact",
       contactText: "Drop me a line and I'll get back to you personally.",
       form: {
