@@ -4,11 +4,10 @@ import path from "path";
 import crypto from "crypto";
 import { readStore, writeStore, sortedImages, type ImageItem } from "@/lib/store";
 import { isAuthed } from "@/lib/auth";
+import { UPLOADS_DIR, mediaUrl } from "@/lib/uploads";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-
-const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
 
 const EXT_BY_TYPE: Record<string, string> = {
   "image/jpeg": ".jpg",
@@ -43,15 +42,15 @@ export async function POST(req: Request) {
   const id = crypto.randomUUID();
   const filename = `${id}${ext}`;
 
-  await fs.mkdir(UPLOAD_DIR, { recursive: true });
+  await fs.mkdir(UPLOADS_DIR, { recursive: true });
   const buf = Buffer.from(await file.arrayBuffer());
-  await fs.writeFile(path.join(UPLOAD_DIR, filename), buf);
+  await fs.writeFile(path.join(UPLOADS_DIR, filename), buf);
 
   const store = await readStore();
   const maxOrder = store.images.reduce((m, i) => Math.max(m, i.order), -1);
   const item: ImageItem = {
     id,
-    file: `/uploads/${filename}`,
+    file: mediaUrl(filename),
     w: w > 0 ? w : 0,
     h: h > 0 ? h : 0,
     title,
