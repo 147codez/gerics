@@ -127,11 +127,11 @@ export const dict: Record<Lang, Dict> = {
           },
           {
             h: "Welche Daten wir bearbeiten",
-            p: "Diese Website erhebt von sich aus keine personenbezogenen Daten und nutzt keine Tracking- oder Analyse-Dienste. Personenbezogene Daten entstehen nur, wenn Sie uns per E-Mail kontaktieren; diese verwenden wir ausschliesslich zur Beantwortung Ihrer Anfrage.",
+            p: "Diese Website nutzt Google Analytics (Google Ireland Ltd.) zur anonymisierten Auswertung von Besucherzahlen und Seitenaufrufen, um das Angebot zu verbessern. Dabei werden technische Daten (z. B. gekürzte IP-Adresse, Browsertyp, Gerät, aufgerufene Seiten) verarbeitet und an Google übertragen, teils in die USA. Weitere personenbezogene Daten entstehen nur, wenn Sie uns per E-Mail kontaktieren; diese verwenden wir ausschliesslich zur Beantwortung Ihrer Anfrage.",
           },
           {
             h: "Cookies",
-            p: "Es wird lediglich ein technisch notwendiges Cookie gesetzt, um Ihre Sprachwahl (Deutsch/Englisch) zu speichern. Es dient nicht der Auswertung und enthält keine personenbezogenen Daten.",
+            p: "Für Ihre Sprachwahl (Deutsch/Englisch) wird ein technisch notwendiges Cookie gesetzt. Google Analytics setzt zusätzlich Cookies zur Reichweitenmessung. Sie können Cookies in Ihrem Browser jederzeit blockieren oder löschen; die Erfassung durch Google lässt sich zudem mit dessen Browser-Add-on unterbinden.",
           },
           {
             h: "Server-Protokolle",
@@ -219,11 +219,11 @@ export const dict: Record<Lang, Dict> = {
           },
           {
             h: "What data we process",
-            p: "This website does not collect personal data on its own and uses no tracking or analytics services. Personal data only arises if you contact us by email; we use it solely to answer your enquiry.",
+            p: "This website uses Google Analytics (Google Ireland Ltd.) to analyse visitor numbers and page views in anonymised form in order to improve the site. Technical data (e.g. shortened IP address, browser type, device, pages viewed) is processed and transferred to Google, partly to the USA. Further personal data only arises if you contact us by email; we use it solely to answer your enquiry.",
           },
           {
             h: "Cookies",
-            p: "Only one technically necessary cookie is set, to remember your language choice (German/English). It is not used for analysis and contains no personal data.",
+            p: "A technically necessary cookie is set for your language choice (German/English). Google Analytics additionally sets cookies for audience measurement. You can block or delete cookies in your browser at any time; you can also prevent collection by Google using its browser add-on.",
           },
           {
             h: "Server logs",

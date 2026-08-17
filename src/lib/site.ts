@@ -3,7 +3,7 @@ export const SITE_NAME = "Ger𝓲cs";
 export const SITE_EMAIL = "info@gerics.ch";
 
 // Google Analytics 4 Mess-ID (z.B. "G-XXXXXXXXXX"). Leer = Analytics aus.
-export const GA_ID = "";
+export const GA_ID = "G-CZS152WKKD";
 
 // Flickr-Archiv (Zahlen zentral pflegbar; Beschriftungen kommen aus i18n).
 export const FLICKR_URL = "https://www.flickr.com/people/piton/";
