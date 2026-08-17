@@ -265,6 +265,17 @@ export default function Dashboard({ initialImages, initialMode, thisWeekIds, nex
             ) : null}
           </div>
         </section>
+
+        {/* Persönliche Erinnerung, nur für dich sichtbar */}
+        <section className="mt-16 border-t border-line pt-10">
+          <h2 className="font-serif text-2xl text-gold sm:text-3xl">Niemals vergessen, wer du bist.</h2>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/geri2.jpg"
+            alt="Zeitungsartikel über Mahmoud Geri Geranmayeh"
+            className="mt-6 w-full max-w-md rounded-2xl border border-line shadow-[0_24px_60px_rgba(0,0,0,0.4)]"
+          />
+        </section>
       </div>
     </main>
   );
