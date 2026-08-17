@@ -34,6 +34,7 @@ export default function Dashboard({ initialImages, initialMode, thisWeekIds, nex
   const fileRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState("");
+  const [zoom, setZoom] = useState(false);
 
   const images = initialImages;
   const mode = initialMode;
@@ -277,18 +278,45 @@ export default function Dashboard({ initialImages, initialMode, thisWeekIds, nex
               <span className="absolute left-1/2 top-[3px] h-7 w-px origin-top rotate-[34deg] bg-muted/50" />
               <span className="absolute left-1/2 top-[3px] h-7 w-px origin-top -rotate-[34deg] bg-muted/50" />
             </div>
-            {/* Rahmen mit Passepartout, leicht schräg */}
-            <div className="-rotate-1 border-[7px] border-[#6b5836] bg-[#efe7d3] p-2 shadow-[0_28px_50px_rgba(0,0,0,0.6)]">
+            {/* Rahmen mit Passepartout, leicht schräg, klickbar zum Vergrössern */}
+            <button
+              type="button"
+              onClick={() => setZoom(true)}
+              title="Zum Vergrössern klicken"
+              className="-rotate-1 cursor-zoom-in border-[7px] border-[#6b5836] bg-[#efe7d3] p-2 shadow-[0_28px_50px_rgba(0,0,0,0.6)] transition hover:-translate-y-1 hover:rotate-0 hover:shadow-[0_34px_60px_rgba(0,0,0,0.7)]"
+            >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/geri2.jpg"
                 alt="Zeitungsartikel über Mahmoud Geri Geranmayeh"
                 className="block w-52 sm:w-56"
               />
-            </div>
+            </button>
           </div>
         </section>
       </div>
+
+      {/* Lightbox: grosse Ansicht */}
+      {zoom ? (
+        <div
+          onClick={() => setZoom(false)}
+          className="fixed inset-0 z-[100] flex cursor-zoom-out items-center justify-center bg-black/85 p-4 backdrop-blur-sm"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/geri2.jpg"
+            alt="Zeitungsartikel über Mahmoud Geri Geranmayeh"
+            className="max-h-[92vh] max-w-[92vw] rounded-lg shadow-2xl"
+          />
+          <button
+            type="button"
+            onClick={() => setZoom(false)}
+            className="absolute right-5 top-5 rounded-full bg-white/10 px-4 py-2 text-sm text-white hover:bg-white/20"
+          >
+            Schliessen ✕
+          </button>
+        </div>
+      ) : null}
     </main>
   );
 }
