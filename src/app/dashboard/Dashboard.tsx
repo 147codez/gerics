@@ -267,14 +267,26 @@ export default function Dashboard({ initialImages, initialMode, thisWeekIds, nex
         </section>
 
         {/* Persönliche Erinnerung, nur für dich sichtbar */}
-        <section className="mt-16 border-t border-line pt-10">
+        <section className="mt-16 border-t border-line pt-10 text-center">
           <h2 className="font-serif text-2xl text-gold sm:text-3xl">Niemals vergessen, wer du bist.</h2>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/geri2.jpg"
-            alt="Zeitungsartikel über Mahmoud Geri Geranmayeh"
-            className="mt-6 w-full max-w-md rounded-2xl border border-line shadow-[0_24px_60px_rgba(0,0,0,0.4)]"
-          />
+
+          <div className="mt-12 inline-block">
+            {/* Nagel + Schnur */}
+            <div className="relative mx-auto h-7 w-40">
+              <span className="absolute left-1/2 top-0 h-2 w-2 -translate-x-1/2 rounded-full bg-muted" />
+              <span className="absolute left-1/2 top-[3px] h-7 w-px origin-top rotate-[34deg] bg-muted/50" />
+              <span className="absolute left-1/2 top-[3px] h-7 w-px origin-top -rotate-[34deg] bg-muted/50" />
+            </div>
+            {/* Rahmen mit Passepartout, leicht schräg */}
+            <div className="-rotate-1 border-[7px] border-[#6b5836] bg-[#efe7d3] p-2 shadow-[0_28px_50px_rgba(0,0,0,0.6)]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/geri2.jpg"
+                alt="Zeitungsartikel über Mahmoud Geri Geranmayeh"
+                className="block w-52 sm:w-56"
+              />
+            </div>
+          </div>
         </section>
       </div>
     </main>
