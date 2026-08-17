@@ -1,0 +1,244 @@
+// Reine Daten/Typen, ohne Server-Abhängigkeiten (auch in Client-Komponenten nutzbar).
+export type Lang = "de" | "en";
+export const LANGS: Lang[] = ["de", "en"];
+export const LANG_COOKIE = "lang";
+
+type Dict = {
+  nav: { start: string; about: string; contact: string };
+  meta: { homeTitle: string; homeDesc: string; aboutTitle: string };
+  home: {
+    tagline: string;
+    eyebrow: string;
+    headline: string;
+    intro: string;
+    aboutBtn: string;
+    contactBtn: string;
+    galleryTitle: string;
+    gallerySub: string;
+    discover: string;
+  };
+  gallery: { comingSoon: string };
+  flickr: {
+    eyebrow: string;
+    title: string;
+    leftLabel: string;
+    leftPeriod: string;
+    rightLabel: string;
+    rightPeriod: string;
+    cta: string;
+    newSoon: string;
+    stats: { views: string; favorites: string; tags: string; groups: string };
+  };
+  about: {
+    eyebrow: string;
+    heading: string;
+    p1: string;
+    p2: string;
+    p3: string;
+    portraitAlt: string;
+    contactTitle: string;
+    contactText: string;
+  };
+  footer: { rights: string; imagesCopyright: string; impressum: string; privacy: string };
+  legal: {
+    impressumTitle: string;
+    privacyTitle: string;
+    updated: string;
+    backHome: string;
+    sections: {
+      impressum: { h: string; p: string }[];
+      privacy: { h: string; p: string }[];
+    };
+  };
+};
+
+export const dict: Record<Lang, Dict> = {
+  de: {
+    nav: { start: "Start", about: "Über uns", contact: "Kontakt" },
+    meta: {
+      homeTitle: "Fotografie seit über 30 Jahren",
+      homeDesc: "Fotografie seit über 30 Jahren.",
+      aboutTitle: "Über uns",
+    },
+    home: {
+      tagline: "Fotografie seit über 30 Jahren",
+      eyebrow: "Herzlich willkommen",
+      headline: "Schön, dass Sie da sind.",
+      intro:
+        "Seit über 30 Jahren fange ich Licht, Menschen und Momente ein. Kein Effekt, kein Lärm, nur das Bild, das bleibt. Nehmen Sie sich einen Moment und schauen Sie sich um.",
+      aboutBtn: "Über mich",
+      contactBtn: "Kontakt aufnehmen",
+      galleryTitle: "Ausgewählte Bilder",
+      gallerySub: "Eine neue Auswahl, jede Woche.",
+      discover: "Entdecken",
+    },
+    gallery: { comingSoon: "Bild folgt" },
+    flickr: {
+      eyebrow: "Mein Flickr-Archiv",
+      title: "Über 30 Jahre in Bildern",
+      leftLabel: "Gewachsenes Archiv",
+      leftPeriod: "2007 – 2026",
+      rightLabel: "Neuer Anfang",
+      rightPeriod: "2026 –",
+      cta: "Das ganze Archiv auf Flickr ansehen →",
+      newSoon: "Neues Profil folgt",
+      stats: { views: "Aufrufe", favorites: "Favoriten", tags: "Tags", groups: "Gruppen" },
+    },
+    about: {
+      eyebrow: "Über mich",
+      heading: "Über 30 Jahre hinter der Kamera",
+      p1: "Seit über 30 Jahren fotografiere ich. Gelebt habe ich in vier Kantonen und eine Zeit lang in Kuala Lumpur, Malaysia. Egal wohin es ging, das Erste im Gepäck waren immer meine Kameras.",
+      p2: "Mich interessiert der Moment, nicht der Aufwand danach. Am fertigen Bild drehe ich höchstens ein wenig an Sättigung und Kontrast, mehr braucht es selten.",
+      p3: "Und ehrlich gesagt: für RAW bin ich zu faul. Was zählt, ist das Bild, das bleibt, nicht die Stunden davor am Bildschirm.",
+      portraitAlt: "Porträt von Geri",
+      contactTitle: "Kontakt",
+      contactText: "Schreiben Sie mir, ich melde mich persönlich zurück.",
+    },
+    footer: {
+      rights: "Alle Rechte vorbehalten.",
+      imagesCopyright: "Alle Bilder sind urheberrechtlich geschützt.",
+      impressum: "Impressum",
+      privacy: "Datenschutz",
+    },
+    legal: {
+      impressumTitle: "Impressum",
+      privacyTitle: "Datenschutz",
+      updated: "Stand: August 2026",
+      backHome: "Zurück zur Startseite",
+      sections: {
+        impressum: [
+          {
+            h: "Verantwortlich",
+            p: "Ger𝓲cs — Mahmoud-Geri Geranmayeh\nStettfurterstrasse 4b\nCH-9548 Matzingen\nE-Mail: info@gerics.ch",
+          },
+          {
+            h: "Urheberrecht der Bilder",
+            p: "Sämtliche auf dieser Website gezeigten Fotografien und Bilder sind urheberrechtlich geschützt und Eigentum von Ger𝓲cs. Jede Nutzung, Vervielfältigung, Bearbeitung, Weitergabe oder Veröffentlichung, ganz oder in Teilen, ist ohne vorherige ausdrückliche schriftliche Zustimmung untersagt. Zuwiderhandlungen werden rechtlich verfolgt.",
+          },
+          {
+            h: "Haftungsausschluss",
+            p: "Die Inhalte dieser Website werden mit grösstmöglicher Sorgfalt erstellt. Für Richtigkeit, Vollständigkeit und Aktualität wird keine Gewähr übernommen. Für Inhalte externer Links sind ausschliesslich deren Betreiber verantwortlich.",
+          },
+        ],
+        privacy: [
+          {
+            h: "Verantwortliche Stelle",
+            p: "Verantwortlich für die Datenbearbeitung ist Ger𝓲cs, info@gerics.ch. Wir halten uns an das schweizerische Datenschutzgesetz (revDSG).",
+          },
+          {
+            h: "Welche Daten wir bearbeiten",
+            p: "Diese Website erhebt von sich aus keine personenbezogenen Daten und nutzt keine Tracking- oder Analyse-Dienste. Personenbezogene Daten entstehen nur, wenn Sie uns per E-Mail kontaktieren; diese verwenden wir ausschliesslich zur Beantwortung Ihrer Anfrage.",
+          },
+          {
+            h: "Cookies",
+            p: "Es wird lediglich ein technisch notwendiges Cookie gesetzt, um Ihre Sprachwahl (Deutsch/Englisch) zu speichern. Es dient nicht der Auswertung und enthält keine personenbezogenen Daten.",
+          },
+          {
+            h: "Server-Protokolle",
+            p: "Beim Aufruf der Website kann der Hosting-Anbieter technische Zugriffsdaten (z. B. IP-Adresse, Zeitpunkt, abgerufene Seite) protokollieren. Diese dienen dem sicheren Betrieb und werden nicht mit anderen Daten zusammengeführt.",
+          },
+          {
+            h: "Ihre Rechte",
+            p: "Sie haben das Recht auf Auskunft, Berichtigung und Löschung Ihrer gespeicherten Daten. Wenden Sie sich dazu an info@gerics.ch.",
+          },
+        ],
+      },
+    },
+  },
+  en: {
+    nav: { start: "Home", about: "About", contact: "Contact" },
+    meta: {
+      homeTitle: "Photography for over 30 years",
+      homeDesc: "Photography for over 30 years.",
+      aboutTitle: "About",
+    },
+    home: {
+      tagline: "Photography for over 30 years",
+      eyebrow: "Welcome",
+      headline: "Good to have you here.",
+      intro:
+        "For over 30 years I've been capturing light, people and moments. No effects, no noise, just the image that lasts. Take a moment and have a look around.",
+      aboutBtn: "About me",
+      contactBtn: "Get in touch",
+      galleryTitle: "Selected images",
+      gallerySub: "A new selection, every week.",
+      discover: "Discover",
+    },
+    gallery: { comingSoon: "Image coming" },
+    flickr: {
+      eyebrow: "My Flickr archive",
+      title: "Over 30 years in images",
+      leftLabel: "Established archive",
+      leftPeriod: "2007 – 2026",
+      rightLabel: "New beginning",
+      rightPeriod: "2026 –",
+      cta: "See the full archive on Flickr →",
+      newSoon: "New profile coming",
+      stats: { views: "Views", favorites: "Favorites", tags: "Tags", groups: "Groups" },
+    },
+    about: {
+      eyebrow: "About me",
+      heading: "Over 30 years behind the camera",
+      p1: "I've been photographing for over 30 years. I've lived in four Swiss cantons and, for a while, in Kuala Lumpur, Malaysia. Wherever I went, the first thing I packed was always my cameras.",
+      p2: "I care about the moment, not the work afterwards. On the finished image I'll nudge the saturation and contrast a little at most, rarely more.",
+      p3: "And honestly: I'm too lazy for RAW. What counts is the image that lasts, not the hours in front of a screen.",
+      portraitAlt: "Portrait of Geri",
+      contactTitle: "Contact",
+      contactText: "Drop me a line and I'll get back to you personally.",
+    },
+    footer: {
+      rights: "All rights reserved.",
+      imagesCopyright: "All images are protected by copyright.",
+      impressum: "Legal notice",
+      privacy: "Privacy",
+    },
+    legal: {
+      impressumTitle: "Legal notice",
+      privacyTitle: "Privacy",
+      updated: "Last updated: August 2026",
+      backHome: "Back to home",
+      sections: {
+        impressum: [
+          {
+            h: "Responsible",
+            p: "Ger𝓲cs — Mahmoud-Geri Geranmayeh\nStettfurterstrasse 4b\nCH-9548 Matzingen\nEmail: info@gerics.ch",
+          },
+          {
+            h: "Image copyright",
+            p: "All photographs and images shown on this website are protected by copyright and are the property of Ger𝓲cs. Any use, reproduction, modification, distribution or publication, in whole or in part, is prohibited without prior express written consent. Violations will be prosecuted.",
+          },
+          {
+            h: "Disclaimer",
+            p: "The content of this website is created with the greatest possible care. No guarantee is given for its accuracy, completeness or timeliness. The operators of external linked sites are solely responsible for their content.",
+          },
+        ],
+        privacy: [
+          {
+            h: "Data controller",
+            p: "The controller for data processing is Ger𝓲cs, info@gerics.ch. We comply with the Swiss Data Protection Act (revDSG).",
+          },
+          {
+            h: "What data we process",
+            p: "This website does not collect personal data on its own and uses no tracking or analytics services. Personal data only arises if you contact us by email; we use it solely to answer your enquiry.",
+          },
+          {
+            h: "Cookies",
+            p: "Only one technically necessary cookie is set, to remember your language choice (German/English). It is not used for analysis and contains no personal data.",
+          },
+          {
+            h: "Server logs",
+            p: "When the site is accessed, the hosting provider may log technical access data (e.g. IP address, time, page requested). This serves secure operation and is not combined with other data.",
+          },
+          {
+            h: "Your rights",
+            p: "You have the right to information about, correction and deletion of the data we hold about you. To exercise these rights, contact info@gerics.ch.",
+          },
+        ],
+      },
+    },
+  },
+};
+
+export function t(lang: Lang): Dict {
+  return dict[lang];
+}

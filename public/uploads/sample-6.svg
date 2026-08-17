@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="700" viewBox="0 0 1400 700">
+  <defs>
+    <linearGradient id="g6" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#c5b489"/>
+      <stop offset="1" stop-color="#9f8e66"/>
+    </linearGradient>
+  </defs>
+  <rect width="1400" height="700" fill="url(#g6)"/>
+  <rect x="26" y="26" width="1348" height="648" fill="none" stroke="#f4ead0" stroke-opacity="0.32" stroke-width="2"/>
+  <text x="700" y="360" font-family="Georgia, serif" font-size="46" letter-spacing="14" fill="#4d4429" fill-opacity="0.42" text-anchor="middle">GERICS</text>
+  <text x="1360" y="668" font-family="sans-serif" font-size="22" fill="#4d4429" fill-opacity="0.3" text-anchor="end">06</text>
+</svg>
