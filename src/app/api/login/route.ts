@@ -6,11 +6,12 @@ export const runtime = "nodejs";
 
 export async function POST(req: Request) {
   const { password } = await req.json().catch(() => ({ password: "" }));
-  if (!checkPassword(password || "")) {
+  const token = makeToken();
+  if (!token || !checkPassword(password || "")) {
     return NextResponse.json({ error: "Falsches Passwort" }, { status: 401 });
   }
   const res = NextResponse.json({ ok: true });
-  res.cookies.set(COOKIE_NAME, makeToken(), {
+  res.cookies.set(COOKIE_NAME, token, {
     httpOnly: true,
     sameSite: "lax",
     path: "/",
