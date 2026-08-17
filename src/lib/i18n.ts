@@ -39,7 +39,7 @@ type Dict = {
     contactTitle: string;
     contactText: string;
   };
-  footer: { rights: string; imagesCopyright: string; impressum: string; privacy: string };
+  footer: { rights: string; imagesCopyright: string; impressum: string; privacy: string; builtBy: string };
   legal: {
     impressumTitle: string;
     privacyTitle: string;
@@ -99,6 +99,7 @@ export const dict: Record<Lang, Dict> = {
       imagesCopyright: "Alle Bilder sind urheberrechtlich geschützt.",
       impressum: "Impressum",
       privacy: "Datenschutz",
+      builtBy: "Erstellt von",
     },
     legal: {
       impressumTitle: "Impressum",
@@ -191,6 +192,7 @@ export const dict: Record<Lang, Dict> = {
       imagesCopyright: "All images are protected by copyright.",
       impressum: "Legal notice",
       privacy: "Privacy",
+      builtBy: "Built by",
     },
     legal: {
       impressumTitle: "Legal notice",

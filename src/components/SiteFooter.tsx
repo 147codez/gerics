@@ -24,7 +24,22 @@ export default function SiteFooter({ lang }: { lang: Lang }) {
             </a>
           </div>
         </div>
-        <p className="text-xs text-muted/80">© {SITE_NAME} — {d.footer.imagesCopyright}</p>
+        <div className="flex flex-col gap-2 text-xs text-muted/80 sm:flex-row sm:items-center sm:justify-between">
+          <span>
+            © {SITE_NAME} — {d.footer.imagesCopyright}
+          </span>
+          <a
+            href="https://147codez.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition hover:opacity-80"
+          >
+            {d.footer.builtBy}{" "}
+            <span className="bg-gradient-to-r from-[#22a7ff] to-[#8b5cf6] bg-clip-text font-semibold text-transparent">
+              147codez
+            </span>
+          </a>
+        </div>
       </div>
     </footer>
   );
