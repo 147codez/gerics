@@ -32,12 +32,11 @@ export default function SiteFooter({ lang }: { lang: Lang }) {
             href="https://147codez.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="transition hover:opacity-80"
+            className="inline-flex items-center gap-2 transition hover:opacity-80"
           >
-            {d.footer.builtBy}{" "}
-            <span className="bg-gradient-to-r from-[#22a7ff] to-[#8b5cf6] bg-clip-text font-semibold text-transparent">
-              147codez
-            </span>
+            {d.footer.builtBy}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/147codez-logo.png" alt="147codez" className="h-5 w-auto" />
           </a>
         </div>
       </div>
