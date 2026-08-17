@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SITE_NAME, SITE_EMAIL } from "@/lib/site";
+import { SITE_NAME } from "@/lib/site";
 import { t, type Lang } from "@/lib/i18n";
 import LangSwitcher from "./LangSwitcher";
 
@@ -19,12 +19,6 @@ export default function SiteHeader({ lang }: { lang: Lang }) {
             <Link href="/ueber-uns" className="hover:text-gold">
               {d.nav.about}
             </Link>
-            <a
-              href={`mailto:${SITE_EMAIL}`}
-              className="rounded-full border border-line px-4 py-1.5 text-gold transition hover:border-gold"
-            >
-              {d.nav.contact}
-            </a>
           </nav>
           <LangSwitcher current={lang} />
         </div>
