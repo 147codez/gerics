@@ -17,6 +17,8 @@ export default function Gallery({
           [4, 3],
           [4, 3],
           [4, 3],
+          [4, 3],
+          [4, 3],
         ].map(([w, h], i) => (
           <figure key={i}>
             <div
