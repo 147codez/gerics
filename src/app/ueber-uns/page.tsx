@@ -22,16 +22,8 @@ export default function UeberUns() {
       <SiteHeader lang={lang} />
 
       <section className="mx-auto max-w-[1500px] px-8 py-16">
-        {/* Kopf */}
-        <div className="max-w-3xl">
-          <p className="text-sm uppercase tracking-brand text-muted">{d.eyebrow}</p>
-          <h1 className="mt-4 font-serif text-4xl leading-[1.1] text-gold sm:text-5xl lg:text-6xl">
-            {d.heading}
-          </h1>
-        </div>
-
-        {/* Links: Bild + Kontakt (gleiche Grösse). Rechts: Bio, vertikal mittig. */}
-        <div className="mt-14 grid items-center gap-12 lg:grid-cols-[440px_1fr] lg:gap-20">
+        {/* Links: Bild. Rechts: Bio, vertikal mittig. */}
+        <div className="grid items-center gap-12 lg:grid-cols-[440px_1fr] lg:gap-20">
           {/* Porträt (quadratisch, kein Zuschnitt) */}
           <img
             src="/geri.jpg"
