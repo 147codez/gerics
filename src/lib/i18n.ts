@@ -38,6 +38,17 @@ type Dict = {
     portraitAlt: string;
     contactTitle: string;
     contactText: string;
+    form: {
+      firstName: string;
+      lastName: string;
+      email: string;
+      phone: string;
+      message: string;
+      send: string;
+      sending: string;
+      success: string;
+      error: string;
+    };
   };
   footer: { rights: string; imagesCopyright: string; impressum: string; privacy: string; builtBy: string };
   legal: {
@@ -93,6 +104,17 @@ export const dict: Record<Lang, Dict> = {
       portraitAlt: "Porträt von Geri",
       contactTitle: "Kontakt",
       contactText: "Schreiben Sie mir, ich melde mich persönlich zurück.",
+      form: {
+        firstName: "Vorname",
+        lastName: "Name",
+        email: "E-Mail",
+        phone: "Telefon",
+        message: "Ihr Anliegen",
+        send: "Absenden",
+        sending: "Wird gesendet …",
+        success: "Danke, Ihre Nachricht ist unterwegs. Ich melde mich bald.",
+        error: "Da ging etwas schief. Bitte später erneut versuchen oder direkt an info@gerics.ch schreiben.",
+      },
     },
     footer: {
       rights: "Alle Rechte vorbehalten.",
@@ -186,6 +208,17 @@ export const dict: Record<Lang, Dict> = {
       portraitAlt: "Portrait of Geri",
       contactTitle: "Contact",
       contactText: "Drop me a line and I'll get back to you personally.",
+      form: {
+        firstName: "First name",
+        lastName: "Last name",
+        email: "Email",
+        phone: "Phone",
+        message: "Your message",
+        send: "Send",
+        sending: "Sending …",
+        success: "Thank you, your message is on its way. I'll be in touch soon.",
+        error: "Something went wrong. Please try again later or email info@gerics.ch directly.",
+      },
     },
     footer: {
       rights: "All rights reserved.",

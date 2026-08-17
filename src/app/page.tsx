@@ -5,7 +5,6 @@ import Gallery from "@/components/Gallery";
 import FlickrCard from "@/components/FlickrCard";
 import { readStore, sortedImages } from "@/lib/store";
 import { selectWeekly } from "@/lib/rotation";
-import { SITE_EMAIL } from "@/lib/site";
 import { t } from "@/lib/i18n";
 import { getLang } from "@/lib/lang";
 
@@ -53,12 +52,12 @@ export default async function Home() {
               >
                 {d.aboutBtn}
               </Link>
-              <a
-                href={`mailto:${SITE_EMAIL}`}
+              <Link
+                href="/ueber-uns#kontakt"
                 className="rounded-full border border-line px-6 py-3 font-medium text-ink transition hover:border-gold"
               >
                 {d.contactBtn}
-              </a>
+              </Link>
             </div>
           </div>
 
