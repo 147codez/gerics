@@ -4,7 +4,15 @@ export const LANGS: Lang[] = ["de", "en"];
 export const LANG_COOKIE = "lang";
 
 type Dict = {
-  nav: { start: string; about: string; contact: string };
+  nav: { start: string; gallery: string; about: string; contact: string };
+  categories: { sport: string; fahrzeuge: string; natur: string; architektur: string };
+  galleryPage: {
+    title: string;
+    sub: string;
+    more: string;
+    catSub: string;
+    back: string;
+  };
   meta: { homeTitle: string; homeDesc: string; aboutTitle: string };
   home: {
     tagline: string;
@@ -67,7 +75,15 @@ type Dict = {
 
 export const dict: Record<Lang, Dict> = {
   de: {
-    nav: { start: "Start", about: "Über uns", contact: "Kontakt" },
+    nav: { start: "Start", gallery: "Galerie", about: "Über uns", contact: "Kontakt" },
+    categories: { sport: "Sport", fahrzeuge: "Fahrzeuge", natur: "Natur", architektur: "Architektur" },
+    galleryPage: {
+      title: "Galerie",
+      sub: "Vier Themen, ein Blick. Ausgewählte Bilder pro Kategorie.",
+      more: "Mehr ansehen →",
+      catSub: "Alle Bilder dieser Kategorie.",
+      back: "← Zur Galerie",
+    },
     meta: {
       homeTitle: "Fotografie seit über 30 Jahren",
       homeDesc: "Fotografie seit über 30 Jahren.",
@@ -173,7 +189,15 @@ export const dict: Record<Lang, Dict> = {
     },
   },
   en: {
-    nav: { start: "Home", about: "About", contact: "Contact" },
+    nav: { start: "Home", gallery: "Gallery", about: "About", contact: "Contact" },
+    categories: { sport: "Sports", fahrzeuge: "Vehicles", natur: "Nature", architektur: "Architecture" },
+    galleryPage: {
+      title: "Gallery",
+      sub: "Four themes, one eye. Selected images per category.",
+      more: "See more →",
+      catSub: "All images in this category.",
+      back: "← Back to gallery",
+    },
     meta: {
       homeTitle: "Photography for over 30 years",
       homeDesc: "Photography for over 30 years.",

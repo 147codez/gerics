@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
-import { readStore, writeStore, sortedImages } from "@/lib/store";
+import { readStore, writeStore, sortedImages, isCategory } from "@/lib/store";
 import { isAuthed } from "@/lib/auth";
 import { UPLOADS_DIR } from "@/lib/uploads";
 
@@ -36,6 +36,11 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
   // Titel ändern
   if (typeof body.title === "string") {
     list[idx].title = body.title;
+  }
+
+  // Kategorie ändern (leer = keine Kategorie)
+  if (typeof body.category === "string") {
+    list[idx].category = isCategory(body.category) ? body.category : "";
   }
 
   // Reihenfolge verschieben (up/down) durch Tausch der order-Werte

@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import type { ImageItem, SelectionMode } from "@/lib/store";
+import { CATEGORIES, type ImageItem, type SelectionMode } from "@/lib/store";
 import { SITE_NAME } from "@/lib/site";
 
 type Props = {
@@ -92,6 +92,15 @@ export default function Dashboard({ initialImages, initialMode, thisWeekIds, nex
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title }),
+    });
+    router.refresh();
+  }
+
+  async function setCategory(id: string, category: string) {
+    await fetch(`/api/images/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ category }),
     });
     router.refresh();
   }
@@ -221,7 +230,20 @@ export default function Dashboard({ initialImages, initialMode, thisWeekIds, nex
                     }}
                     className="w-full rounded-lg border border-line bg-paper px-3 py-1.5 text-sm text-ink outline-none placeholder:text-muted focus:border-gold"
                   />
-                  <div className="mt-1 flex flex-wrap gap-1.5 text-xs">
+                  <div className="mt-1 flex flex-wrap items-center gap-1.5 text-xs">
+                    <select
+                      defaultValue={img.category || ""}
+                      onChange={(e) => setCategory(img.id, e.target.value)}
+                      className="rounded-lg border border-line bg-paper px-2 py-1 text-xs text-ink outline-none focus:border-gold"
+                      title="Galerie-Kategorie"
+                    >
+                      <option value="">Keine Kategorie</option>
+                      {CATEGORIES.map((c) => (
+                        <option key={c} value={c}>
+                          {c.charAt(0).toUpperCase() + c.slice(1)}
+                        </option>
+                      ))}
+                    </select>
                     <span className="text-muted">
                       {img.w && img.h ? `${img.w}×${img.h}px` : "Grösse unbekannt"}
                     </span>

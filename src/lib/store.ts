@@ -1,6 +1,14 @@
 import { promises as fs } from "fs";
 import path from "path";
 
+// Galerie-Kategorien (Slug = URL-Segment unter /galerie).
+export const CATEGORIES = ["sport", "fahrzeuge", "natur", "architektur"] as const;
+export type Category = (typeof CATEGORIES)[number];
+
+export function isCategory(v: string): v is Category {
+  return (CATEGORIES as readonly string[]).includes(v);
+}
+
 // Bild im geordneten "Ordner" des Fotografen.
 export type ImageItem = {
   id: string;
@@ -9,6 +17,7 @@ export type ImageItem = {
   h: number; // Originalhöhe in px
   title: string;
   order: number; // Reihenfolge bestimmt die Rotation
+  category?: Category | ""; // leer = keiner Kategorie zugeordnet
 };
 
 export type SelectionMode = "rotate" | "random";
@@ -42,4 +51,9 @@ export async function writeStore(store: Store): Promise<void> {
 // Bilder immer nach order sortiert zurückgeben.
 export function sortedImages(store: Store): ImageItem[] {
   return [...store.images].sort((a, b) => a.order - b.order);
+}
+
+// Alle Bilder einer Kategorie, nach order sortiert.
+export function imagesByCategory(store: Store, category: Category): ImageItem[] {
+  return sortedImages(store).filter((i) => i.category === category);
 }
