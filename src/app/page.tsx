@@ -23,7 +23,7 @@ export default async function Home() {
       <SiteHeader lang={lang} />
 
       {/* Hero mit rotierender Münze (Video), füllt den ersten Bildschirm */}
-      <section className="mx-auto max-w-[1500px] px-8 pb-16 pt-4">
+      <section className="mx-auto max-w-[1500px] px-5 sm:px-8 pb-16 pt-4">
         <div className="relative overflow-hidden rounded-[28px] border border-line">
           <video
             className="absolute inset-0 h-full w-full object-cover"
@@ -39,7 +39,7 @@ export default async function Home() {
           <div className="absolute inset-0 bg-gradient-to-r from-[#2a2723] via-[#2a2723]/80 to-[#2a2723]/20" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#2a2723]/90 via-transparent to-transparent" />
 
-          <div className="relative flex min-h-[calc(100vh-6.75rem)] max-w-2xl flex-col justify-center px-8 py-16 sm:px-12">
+          <div className="relative flex min-h-[calc(100vh-6.75rem)] max-w-2xl flex-col justify-center px-6 py-16 sm:px-12">
             <p className="text-sm uppercase tracking-brand text-muted">{d.eyebrow}</p>
             <h1 className="mt-5 font-serif text-5xl leading-[1.05] text-gold sm:text-6xl lg:text-7xl">
               {d.headline}
@@ -78,7 +78,7 @@ export default async function Home() {
 
       {/* Galerie der Woche (zweiter Bildschirm), per Dashboard-Schalter abschaltbar */}
       {store.settings.weeklyEnabled ? (
-        <section id="galerie" className="mx-auto max-w-[1500px] scroll-mt-24 px-8 pb-20 pt-6">
+        <section id="galerie" className="mx-auto max-w-[1500px] scroll-mt-24 px-5 pb-20 pt-6 sm:px-8">
           <div className="mb-6 flex flex-wrap items-baseline justify-between gap-2">
             <h2 className="font-serif text-2xl text-gold">{d.galleryTitle}</h2>
             <span className="text-sm text-muted">{d.gallerySub}</span>
@@ -89,7 +89,7 @@ export default async function Home() {
 
       {/* Cover-Flow-Karussell über alle Bilder */}
       {images.length > 0 ? (
-        <section className="mx-auto max-w-[1500px] px-8 pb-20">
+        <section className="mx-auto max-w-[1500px] px-5 sm:px-8 pb-20">
           <CoverFlow images={images} />
         </section>
       ) : null}
@@ -97,7 +97,7 @@ export default async function Home() {
       {/* Vintage-Karte: Flickr-Archiv (übernimmt den Entdecken-Anker, wenn die Wochen-Galerie aus ist) */}
       <section
         id={store.settings.weeklyEnabled ? undefined : "galerie"}
-        className="mx-auto max-w-[1500px] scroll-mt-24 px-8 pb-20"
+        className="mx-auto max-w-[1500px] scroll-mt-24 px-5 pb-20 sm:px-8"
       >
         <FlickrCard lang={lang} />
       </section>

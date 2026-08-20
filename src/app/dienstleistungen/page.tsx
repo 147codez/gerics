@@ -22,7 +22,7 @@ export default async function DienstleistungenPage() {
     <main className="min-h-screen">
       <SiteHeader lang={lang} />
 
-      <section className="mx-auto max-w-[1500px] px-8 pb-20 pt-12">
+      <section className="mx-auto max-w-[1500px] px-5 sm:px-8 pb-20 pt-12">
         <p className="text-sm uppercase tracking-brand text-muted">{d.title}</p>
         <h1 className="mt-3 max-w-3xl font-serif text-4xl leading-tight text-gold sm:text-5xl">
           {d.sub}

@@ -2,8 +2,7 @@
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { CATEGORIES } from "@/lib/categories";
-import type { Availability, ImageItem, SelectionMode, ServiceItem } from "@/lib/store";
+import type { Availability, CategoryDef, ImageItem, SelectionMode, ServiceItem } from "@/lib/store";
 import { SITE_NAME } from "@/lib/site";
 import ImageEditor from "./ImageEditor";
 
@@ -13,6 +12,7 @@ type Props = {
   initialWeeklyEnabled: boolean;
   thisWeekIds: string[];
   nextWeekIds: string[];
+  initialCategories: CategoryDef[];
   initialServices: ServiceItem[];
   initialAvailability: Availability;
   servicesUpdatedAt: string;
@@ -52,6 +52,7 @@ export default function Dashboard({
   initialWeeklyEnabled,
   thisWeekIds,
   nextWeekIds,
+  initialCategories,
   initialServices,
   initialAvailability,
   servicesUpdatedAt,
@@ -65,7 +66,9 @@ export default function Dashboard({
   const [dragId, setDragId] = useState<string | null>(null);
   const [tab, setTab] = useState<"bilder" | "cms">("bilder");
   const [av, setAv] = useState<Availability>(initialAvailability);
+  const [newCat, setNewCat] = useState("");
   const services = initialServices;
+  const cats = initialCategories;
 
   const images = initialImages;
   const mode = initialMode;
@@ -184,6 +187,35 @@ export default function Dashboard({
     await reorder(arr.map((i) => i.id));
   }
 
+  // Neue Galerie-Kategorie anlegen (erscheint automatisch in Navbar + /galerie).
+  async function addCategory() {
+    const label = newCat.trim();
+    if (!label) return;
+    setBusy(true);
+    const res = await fetch("/api/categories", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ label }),
+    });
+    setBusy(false);
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      setMsg(data.error || "Kategorie konnte nicht angelegt werden.");
+      return;
+    }
+    setNewCat("");
+    setMsg("");
+    router.refresh();
+  }
+
+  async function removeCategory(slug: string, label: string) {
+    if (!confirm(`Kategorie "${label}" löschen? Die Bilder bleiben erhalten, verlieren nur die Zuordnung.`)) return;
+    setBusy(true);
+    await fetch(`/api/categories/${slug}`, { method: "DELETE" });
+    setBusy(false);
+    router.refresh();
+  }
+
   async function setCategory(id: string, category: string) {
     await fetch(`/api/images/${id}`, {
       method: "PATCH",
@@ -269,7 +301,7 @@ export default function Dashboard({
 
   return (
     <main className="min-h-screen bg-paper text-ink">
-      <header className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6">
+      <header className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-6 sm:px-6">
         <div>
           <div className="text-lg font-semibold uppercase tracking-brand">{SITE_NAME}</div>
           <div className="text-sm text-muted">Bild-Verwaltung</div>
@@ -284,7 +316,7 @@ export default function Dashboard({
         </div>
       </header>
 
-      <div className="mx-auto max-w-7xl px-6 pb-20">
+      <div className="mx-auto max-w-7xl px-4 pb-20 sm:px-6">
         {/* Tab-Leiste: Bilder / Dienstleistungen (CMS) */}
         <div className="mb-8 flex gap-2">
           <button
@@ -429,35 +461,64 @@ export default function Dashboard({
             direkt in die Kategorie. Bilder lassen sich per Ziehen umsortieren oder in eine andere
             Kategorie verschieben.
           </p>
+          {/* Neue Kategorie: erscheint automatisch in Navbar-Dropdown, Mobile-Menü und /galerie */}
+          <div className="mt-3 flex flex-wrap gap-2">
+            <input
+              value={newCat}
+              onChange={(e) => setNewCat(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") addCategory();
+              }}
+              placeholder="Neue Kategorie, z.B. Porträts"
+              className="w-64 max-w-full rounded-xl border border-line bg-paper px-3 py-2 text-sm text-ink outline-none placeholder:text-muted focus:border-gold"
+            />
+            <button
+              onClick={addCategory}
+              disabled={busy || !newCat.trim()}
+              className="rounded-xl bg-gold px-4 py-2 text-sm font-medium text-paper hover:brightness-105 disabled:opacity-60"
+            >
+              + Kategorie anlegen
+            </button>
+          </div>
           <div className="mt-4 space-y-4">
-            {CATEGORIES.map((c) => {
+            {cats.map((cat) => {
+              const c = cat.slug;
               const catImages = images.filter((i) => i.category === c);
               return (
-                <div key={c} className="rounded-2xl border border-line bg-[#312d27] p-5">
+                <div key={c} className="rounded-2xl border border-line bg-[#312d27] p-4 sm:p-5">
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <h3 className="font-medium">
-                      {c.charAt(0).toUpperCase() + c.slice(1)}{" "}
-                      <span className="text-xs text-muted">({catImages.length})</span>
+                      {cat.label} <span className="text-xs text-muted">({catImages.length})</span>
                     </h3>
-                    <label
-                      className={`cursor-pointer rounded-lg bg-gold px-4 py-2 text-sm text-paper ${
-                        busy ? "opacity-60" : "hover:brightness-105"
-                      }`}
-                    >
-                      Bilder hochladen
-                      <input
-                        type="file"
-                        accept="image/*"
-                        multiple
-                        hidden
+                    <div className="flex items-center gap-2">
+                      <label
+                        className={`cursor-pointer rounded-lg bg-gold px-4 py-2 text-sm text-paper ${
+                          busy ? "opacity-60" : "hover:brightness-105"
+                        }`}
+                      >
+                        Bilder hochladen
+                        <input
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          hidden
+                          disabled={busy}
+                          onChange={async (e) => {
+                            const el = e.currentTarget;
+                            await handleFiles(el.files, c);
+                            el.value = "";
+                          }}
+                        />
+                      </label>
+                      <button
+                        onClick={() => removeCategory(c, cat.label)}
                         disabled={busy}
-                        onChange={async (e) => {
-                          const el = e.currentTarget;
-                          await handleFiles(el.files, c);
-                          el.value = "";
-                        }}
-                      />
-                    </label>
+                        title="Kategorie löschen (Bilder bleiben erhalten)"
+                        className="rounded-lg border border-line px-2.5 py-2 text-sm text-red-700 hover:bg-red-50"
+                      >
+                        ✕
+                      </button>
+                    </div>
                   </div>
                   <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-5">
                     {Array.from({ length: 5 }).map((_, i) => {
@@ -600,9 +661,9 @@ export default function Dashboard({
                   title="Galerie-Kategorie"
                 >
                   <option value="">Keine Kategorie</option>
-                  {CATEGORIES.map((c) => (
-                    <option key={c} value={c}>
-                      {c.charAt(0).toUpperCase() + c.slice(1)}
+                  {cats.map((cat) => (
+                    <option key={cat.slug} value={cat.slug}>
+                      {cat.label}
                     </option>
                   ))}
                 </select>

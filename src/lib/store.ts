@@ -1,9 +1,22 @@
 import { promises as fs } from "fs";
 import path from "path";
 
-import { type Category } from "./categories";
+// Galerie-Kategorie, im Dashboard frei anlegbar/löschbar.
+// slug = URL-Segment unter /galerie, label = Anzeigename.
+export type CategoryDef = { slug: string; label: string };
 
-export { CATEGORIES, isCategory, type Category } from "./categories";
+// Anzeigename -> URL-Slug (Umlaute ausgeschrieben, nur a-z0-9-).
+export function toCategorySlug(label: string): string {
+  return label
+    .toLowerCase()
+    .replace(/ä/g, "ae")
+    .replace(/ö/g, "oe")
+    .replace(/ü/g, "ue")
+    .replace(/[éèê]/g, "e")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 40);
+}
 
 // Bild im geordneten "Ordner" des Fotografen.
 export type ImageItem = {
@@ -13,7 +26,7 @@ export type ImageItem = {
   h: number; // Originalhöhe in px
   title: string;
   order: number; // Reihenfolge bestimmt die Rotation
-  category?: Category | ""; // leer = keiner Kategorie zugeordnet
+  category?: string; // Kategorie-Slug, leer = keiner Kategorie zugeordnet
 };
 
 export type SelectionMode = "rotate" | "random";
@@ -42,10 +55,18 @@ export type Store = {
   // weeklyEnabled: Wochen-Galerie auf der Startseite an/aus (Standard an)
   settings: { mode: SelectionMode; weeklyEnabled: boolean };
   images: ImageItem[];
+  categories: CategoryDef[];
   services: ServiceItem[];
   availability: Availability;
   servicesUpdatedAt: string; // ISO-Zeitpunkt der letzten CMS-Änderung ("Gespeichert")
 };
+
+const DEFAULT_CATEGORIES: CategoryDef[] = [
+  { slug: "sport", label: "Sport" },
+  { slug: "fahrzeuge", label: "Fahrzeuge" },
+  { slug: "natur", label: "Natur" },
+  { slug: "architektur", label: "Architektur" },
+];
 
 const DEFAULT_AVAILABILITY: Availability = { days: [1, 2, 3, 4, 5], from: "09:00", to: "18:00", slotMinutes: 60 };
 
@@ -98,6 +119,7 @@ const DATA_FILE = path.join(process.cwd(), "data", "store.json");
 const EMPTY: Store = {
   settings: { mode: "rotate", weeklyEnabled: true },
   images: [],
+  categories: DEFAULT_CATEGORIES,
   services: DEFAULT_SERVICES,
   availability: DEFAULT_AVAILABILITY,
   servicesUpdatedAt: "",
@@ -110,6 +132,9 @@ export async function readStore(): Promise<Store> {
     if (!parsed.settings) parsed.settings = { mode: "rotate", weeklyEnabled: true };
     if (typeof parsed.settings.weeklyEnabled !== "boolean") parsed.settings.weeklyEnabled = true;
     if (!Array.isArray(parsed.images)) parsed.images = [];
+    if (!Array.isArray(parsed.categories) || parsed.categories.length === 0) {
+      parsed.categories = structuredClone(DEFAULT_CATEGORIES);
+    }
     if (!Array.isArray(parsed.services)) parsed.services = structuredClone(DEFAULT_SERVICES);
     // Ältere Einträge um neue Felder ergänzen
     parsed.services = parsed.services.map((s) => ({
@@ -135,8 +160,8 @@ export function sortedImages(store: Store): ImageItem[] {
   return [...store.images].sort((a, b) => a.order - b.order);
 }
 
-// Alle Bilder einer Kategorie, nach order sortiert.
-export function imagesByCategory(store: Store, category: Category): ImageItem[] {
+// Alle Bilder einer Kategorie (Slug), nach order sortiert.
+export function imagesByCategory(store: Store, category: string): ImageItem[] {
   return sortedImages(store).filter((i) => i.category === category);
 }
 
