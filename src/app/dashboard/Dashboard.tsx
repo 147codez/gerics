@@ -2,7 +2,8 @@
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { CATEGORIES, type ImageItem, type SelectionMode } from "@/lib/store";
+import { CATEGORIES } from "@/lib/categories";
+import type { ImageItem, SelectionMode } from "@/lib/store";
 import { SITE_NAME } from "@/lib/site";
 
 type Props = {

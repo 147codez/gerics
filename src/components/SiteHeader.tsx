@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { SITE_NAME } from "@/lib/site";
-import { CATEGORIES } from "@/lib/store";
+import { CATEGORIES } from "@/lib/categories";
 import { t, type Lang } from "@/lib/i18n";
 import LangSwitcher from "./LangSwitcher";
 

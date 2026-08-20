@@ -1,13 +1,9 @@
 import { promises as fs } from "fs";
 import path from "path";
 
-// Galerie-Kategorien (Slug = URL-Segment unter /galerie).
-export const CATEGORIES = ["sport", "fahrzeuge", "natur", "architektur"] as const;
-export type Category = (typeof CATEGORIES)[number];
+import { type Category } from "./categories";
 
-export function isCategory(v: string): v is Category {
-  return (CATEGORIES as readonly string[]).includes(v);
-}
+export { CATEGORIES, isCategory, type Category } from "./categories";
 
 // Bild im geordneten "Ordner" des Fotografen.
 export type ImageItem = {
