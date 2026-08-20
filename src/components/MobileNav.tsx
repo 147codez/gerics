@@ -7,9 +7,11 @@ import type { CategoryDef } from "@/lib/store";
 // Mobile-Menü: Hamburger-Knopf, aufklappbares Panel mit allen Seiten + Kategorien.
 export default function MobileNav({
   categories,
+  showServices,
   labels,
 }: {
   categories: CategoryDef[];
+  showServices: boolean;
   labels: { start: string; gallery: string; services: string; about: string };
 }) {
   const [open, setOpen] = useState(false);
@@ -48,13 +50,15 @@ export default function MobileNav({
                 {c.label}
               </Link>
             ))}
-            <Link
-              href="/dienstleistungen"
-              onClick={() => setOpen(false)}
-              className="rounded-xl px-4 py-3 hover:bg-[#35322c]"
-            >
-              {labels.services}
-            </Link>
+            {showServices ? (
+              <Link
+                href="/dienstleistungen"
+                onClick={() => setOpen(false)}
+                className="rounded-xl px-4 py-3 hover:bg-[#35322c]"
+              >
+                {labels.services}
+              </Link>
+            ) : null}
             <Link
               href="/ueber-uns"
               onClick={() => setOpen(false)}

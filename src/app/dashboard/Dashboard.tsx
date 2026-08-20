@@ -15,6 +15,7 @@ type Props = {
   initialCategories: CategoryDef[];
   initialServices: ServiceItem[];
   initialAvailability: Availability;
+  initialServicesEnabled: boolean;
   servicesUpdatedAt: string;
 };
 
@@ -55,6 +56,7 @@ export default function Dashboard({
   initialCategories,
   initialServices,
   initialAvailability,
+  initialServicesEnabled,
   servicesUpdatedAt,
 }: Props) {
   const router = useRouter();
@@ -255,6 +257,18 @@ export default function Dashboard({
     if (!confirm("Diese Dienstleistung wirklich löschen?")) return;
     setBusy(true);
     await fetch(`/api/services/${id}`, { method: "DELETE" });
+    setBusy(false);
+    router.refresh();
+  }
+
+  // Shop auf/zu: Dienstleistungs-Seite öffentlich sichtbar machen oder verstecken.
+  async function setServicesEnabled(next: boolean) {
+    setBusy(true);
+    await fetch("/api/settings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ servicesEnabled: next }),
+    });
     setBusy(false);
     router.refresh();
   }
@@ -733,6 +747,32 @@ export default function Dashboard({
             Angebote, Preise und Verfügbarkeit der Dienstleistungs-Seite. Anfragen kommen per E-Mail
             an info@gerics.ch.
           </p>
+
+          {/* Shop auf/zu: solange geschlossen, ist die Seite öffentlich unsichtbar */}
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-line bg-[#312d27] p-5">
+            <div>
+              <h3 className="font-medium">Auf der Website sichtbar</h3>
+              <p className="mt-1 text-sm text-muted">
+                {initialServicesEnabled
+                  ? "Der Dienstleistungs-Bereich ist öffentlich sichtbar (Navbar + Seite + Buchung)."
+                  : "Geschlossen: kein Navbar-Eintrag, die Seite leitet auf die Startseite um. Hier im Dashboard kannst du in Ruhe kalkulieren."}
+              </p>
+            </div>
+            <button
+              onClick={() => setServicesEnabled(!initialServicesEnabled)}
+              disabled={busy}
+              title={initialServicesEnabled ? "Shop schliessen" : "Shop öffnen"}
+              className={`relative h-7 w-14 flex-none rounded-full border transition ${
+                initialServicesEnabled ? "border-gold bg-gold" : "border-line bg-[#35322c]"
+              }`}
+            >
+              <span
+                className={`absolute top-0.5 h-[22px] w-[22px] rounded-full bg-paper shadow transition-all ${
+                  initialServicesEnabled ? "left-[30px]" : "left-0.5"
+                }`}
+              />
+            </button>
+          </div>
 
           {/* Verfügbarkeit */}
           <div className="mt-5 rounded-2xl border border-line bg-[#312d27] p-5">

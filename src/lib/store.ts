@@ -53,7 +53,9 @@ export type Availability = {
 
 export type Store = {
   // weeklyEnabled: Wochen-Galerie auf der Startseite an/aus (Standard an)
-  settings: { mode: SelectionMode; weeklyEnabled: boolean };
+  // servicesEnabled: Dienstleistungs-Seite öffentlich sichtbar (Standard aus,
+  // erst nach Kalkulation im Dashboard freischalten)
+  settings: { mode: SelectionMode; weeklyEnabled: boolean; servicesEnabled: boolean };
   images: ImageItem[];
   categories: CategoryDef[];
   services: ServiceItem[];
@@ -117,7 +119,7 @@ const DEFAULT_SERVICES: ServiceItem[] = [
 const DATA_FILE = path.join(process.cwd(), "data", "store.json");
 
 const EMPTY: Store = {
-  settings: { mode: "rotate", weeklyEnabled: true },
+  settings: { mode: "rotate", weeklyEnabled: true, servicesEnabled: false },
   images: [],
   categories: DEFAULT_CATEGORIES,
   services: DEFAULT_SERVICES,
@@ -129,8 +131,9 @@ export async function readStore(): Promise<Store> {
   try {
     const raw = await fs.readFile(DATA_FILE, "utf8");
     const parsed = JSON.parse(raw) as Store;
-    if (!parsed.settings) parsed.settings = { mode: "rotate", weeklyEnabled: true };
+    if (!parsed.settings) parsed.settings = { mode: "rotate", weeklyEnabled: true, servicesEnabled: false };
     if (typeof parsed.settings.weeklyEnabled !== "boolean") parsed.settings.weeklyEnabled = true;
+    if (typeof parsed.settings.servicesEnabled !== "boolean") parsed.settings.servicesEnabled = false;
     if (!Array.isArray(parsed.images)) parsed.images = [];
     if (!Array.isArray(parsed.categories) || parsed.categories.length === 0) {
       parsed.categories = structuredClone(DEFAULT_CATEGORIES);

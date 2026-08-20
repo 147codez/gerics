@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import ServiceBooking from "@/components/ServiceBooking";
@@ -16,6 +17,9 @@ export default async function DienstleistungenPage() {
   const lang = getLang();
   const d = t(lang).services;
   const store = await readStore();
+  // Shop geschlossen: Seite ist öffentlich nicht erreichbar, bis der
+  // Schalter im Dashboard-CMS auf sichtbar steht.
+  if (!store.settings.servicesEnabled) redirect("/");
   const services = sortedServices(store).filter((s) => s.active);
 
   return (

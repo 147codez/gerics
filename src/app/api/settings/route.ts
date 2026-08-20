@@ -21,6 +21,12 @@ export async function POST(req: Request) {
     store.settings.weeklyEnabled = body.weeklyEnabled;
   }
 
+  // Dienstleistungs-Seite öffentlich sichtbar/unsichtbar (Shop auf/zu)
+  if (typeof body.servicesEnabled === "boolean") {
+    store.settings.servicesEnabled = body.servicesEnabled;
+    store.servicesUpdatedAt = new Date().toISOString();
+  }
+
   // Verfügbarkeit fürs Buchungs-CMS
   if (body.availability && typeof body.availability === "object") {
     const a = body.availability;

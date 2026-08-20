@@ -46,9 +46,11 @@ export default async function SiteHeader({ lang }: { lang: Lang }) {
                 </div>
               </div>
             </div>
-            <Link href="/dienstleistungen" className="hover:text-gold">
-              {d.nav.services}
-            </Link>
+            {store.settings.servicesEnabled ? (
+              <Link href="/dienstleistungen" className="hover:text-gold">
+                {d.nav.services}
+              </Link>
+            ) : null}
             <Link href="/ueber-uns" className="hover:text-gold">
               {d.nav.about}
             </Link>
@@ -56,6 +58,7 @@ export default async function SiteHeader({ lang }: { lang: Lang }) {
           <LangSwitcher current={lang} />
           <MobileNav
             categories={categories}
+            showServices={store.settings.servicesEnabled}
             labels={{
               start: d.nav.start,
               gallery: d.nav.gallery,
