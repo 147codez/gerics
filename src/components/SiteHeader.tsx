@@ -39,6 +39,9 @@ export default function SiteHeader({ lang }: { lang: Lang }) {
                 </div>
               </div>
             </div>
+            <Link href="/dienstleistungen" className="hover:text-gold">
+              {d.nav.services}
+            </Link>
             <Link href="/ueber-uns" className="hover:text-gold">
               {d.nav.about}
             </Link>

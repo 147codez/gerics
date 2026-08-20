@@ -4,7 +4,17 @@ export const LANGS: Lang[] = ["de", "en"];
 export const LANG_COOKIE = "lang";
 
 type Dict = {
-  nav: { start: string; gallery: string; about: string; contact: string };
+  nav: { start: string; gallery: string; services: string; about: string; contact: string };
+  services: {
+    title: string;
+    sub: string;
+    items: { h: string; p: string }[];
+    cta: string;
+    formTitle: string;
+    serviceLabel: string;
+    dateLabel: string;
+    note: string;
+  };
   categories: { sport: string; fahrzeuge: string; natur: string; architektur: string };
   galleryPage: {
     title: string;
@@ -75,7 +85,34 @@ type Dict = {
 
 export const dict: Record<Lang, Dict> = {
   de: {
-    nav: { start: "Start", gallery: "Galerie", about: "Über uns", contact: "Kontakt" },
+    nav: { start: "Start", gallery: "Galerie", services: "Dienstleistungen", about: "Über uns", contact: "Kontakt" },
+    services: {
+      title: "Dienstleistungen",
+      sub: "Vom Porträt bis zum Print. Wählen Sie ein Angebot und senden Sie eine Anfrage, ich melde mich persönlich mit Termin und Details.",
+      items: [
+        {
+          h: "Porträt & Bewerbung",
+          p: "Porträts mit natürlichem Licht, einzeln oder als kleine Serie, auch für Bewerbung und Profil.",
+        },
+        {
+          h: "Events & Feiern",
+          p: "Hochzeiten, Geburtstage, Firmenanlässe: unaufdringlich begleitet, ehrlich festgehalten.",
+        },
+        {
+          h: "Auftragsarbeiten",
+          p: "Architektur, Fahrzeuge, Produkte oder Reportagen, nach Absprache vor Ort.",
+        },
+        {
+          h: "Fine-Art-Prints",
+          p: "Ausgewählte Motive als hochwertige Drucke, auf Wunsch signiert und gerahmt.",
+        },
+      ],
+      cta: "Termin anfragen",
+      formTitle: "Anfrage senden",
+      serviceLabel: "Dienstleistung",
+      dateLabel: "Wunschtermin (optional)",
+      note: "Unverbindliche Anfrage, ich melde mich persönlich zurück.",
+    },
     categories: { sport: "Sport", fahrzeuge: "Fahrzeuge", natur: "Natur", architektur: "Architektur" },
     galleryPage: {
       title: "Galerie",
@@ -189,7 +226,34 @@ export const dict: Record<Lang, Dict> = {
     },
   },
   en: {
-    nav: { start: "Home", gallery: "Gallery", about: "About", contact: "Contact" },
+    nav: { start: "Home", gallery: "Gallery", services: "Services", about: "About", contact: "Contact" },
+    services: {
+      title: "Services",
+      sub: "From portraits to prints. Pick an offer and send a request, I'll get back to you personally with a date and details.",
+      items: [
+        {
+          h: "Portraits & Applications",
+          p: "Portraits in natural light, single shots or a small series, also for applications and profiles.",
+        },
+        {
+          h: "Events & Celebrations",
+          p: "Weddings, birthdays, company events: accompanied unobtrusively, captured honestly.",
+        },
+        {
+          h: "Commissioned work",
+          p: "Architecture, vehicles, products or reportage, on site by arrangement.",
+        },
+        {
+          h: "Fine art prints",
+          p: "Selected motifs as high-quality prints, signed and framed on request.",
+        },
+      ],
+      cta: "Request a date",
+      formTitle: "Send request",
+      serviceLabel: "Service",
+      dateLabel: "Preferred date (optional)",
+      note: "Non-binding request, I'll get back to you personally.",
+    },
     categories: { sport: "Sports", fahrzeuge: "Vehicles", natur: "Nature", architektur: "Architecture" },
     galleryPage: {
       title: "Gallery",
