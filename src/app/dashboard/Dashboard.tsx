@@ -260,14 +260,24 @@ export default function Dashboard({ initialImages, initialMode, thisWeekIds, nex
                             alt={img.title || ""}
                             className="h-full w-full object-cover"
                           />
-                          <button
-                            onClick={() => setEditing(img)}
-                            disabled={busy}
-                            title="Zuschneiden / Format / Auflösung"
-                            className="absolute right-1.5 top-1.5 rounded-lg bg-black/55 px-2 py-1 text-sm text-white opacity-0 backdrop-blur-sm transition hover:bg-black/75 focus:opacity-100 group-hover:opacity-100"
-                          >
-                            ✎
-                          </button>
+                          <div className="absolute right-1.5 top-1.5 flex gap-1 opacity-0 transition focus-within:opacity-100 group-hover:opacity-100">
+                            <button
+                              onClick={() => setEditing(img)}
+                              disabled={busy}
+                              title="Zuschneiden / Format / Auflösung"
+                              className="rounded-lg bg-black/55 px-2 py-1 text-sm text-white backdrop-blur-sm hover:bg-black/75"
+                            >
+                              ✎
+                            </button>
+                            <button
+                              onClick={() => setCategory(img.id, "")}
+                              disabled={busy}
+                              title="Aus Kategorie entfernen (Bild bleibt im Ordner)"
+                              className="rounded-lg bg-black/55 px-2 py-1 text-sm text-white backdrop-blur-sm hover:bg-red-900/80"
+                            >
+                              ✕
+                            </button>
+                          </div>
                         </div>
                       ) : (
                         <div
