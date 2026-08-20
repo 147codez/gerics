@@ -19,6 +19,7 @@ export default async function DashboardPage() {
     <Dashboard
       initialImages={images}
       initialMode={store.settings.mode}
+      initialWeeklyEnabled={store.settings.weeklyEnabled}
       thisWeekIds={thisWeek}
       nextWeekIds={nextWeek}
     />

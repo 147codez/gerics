@@ -10,6 +10,7 @@ import ImageEditor from "./ImageEditor";
 type Props = {
   initialImages: ImageItem[];
   initialMode: SelectionMode;
+  initialWeeklyEnabled: boolean;
   thisWeekIds: string[];
   nextWeekIds: string[];
 };
@@ -31,7 +32,13 @@ function readDimensions(file: File): Promise<{ w: number; h: number }> {
   });
 }
 
-export default function Dashboard({ initialImages, initialMode, thisWeekIds, nextWeekIds }: Props) {
+export default function Dashboard({
+  initialImages,
+  initialMode,
+  initialWeeklyEnabled,
+  thisWeekIds,
+  nextWeekIds,
+}: Props) {
   const router = useRouter();
   const fileRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
@@ -41,6 +48,7 @@ export default function Dashboard({ initialImages, initialMode, thisWeekIds, nex
 
   const images = initialImages;
   const mode = initialMode;
+  const weeklyEnabled = initialWeeklyEnabled;
   const thisWeek = new Set(thisWeekIds);
   const nextWeek = new Set(nextWeekIds);
 
@@ -75,6 +83,17 @@ export default function Dashboard({ initialImages, initialMode, thisWeekIds, nex
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ mode: next }),
+    });
+    setBusy(false);
+    router.refresh();
+  }
+
+  async function setWeeklyEnabled(next: boolean) {
+    setBusy(true);
+    await fetch("/api/settings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ weeklyEnabled: next }),
     });
     setBusy(false);
     router.refresh();
@@ -144,11 +163,31 @@ export default function Dashboard({ initialImages, initialMode, thisWeekIds, nex
         {/* Modus + Upload */}
         <section className="grid gap-4 sm:grid-cols-2">
           <div className="rounded-2xl border border-line bg-[#312d27] p-5">
-            <h2 className="font-medium">Auswahl pro Woche</h2>
-            <p className="mt-1 text-sm text-muted">Wie werden die 4 Bilder gewählt?</p>
-            <div className="mt-4 flex gap-2">
+            <div className="flex items-center justify-between gap-3">
+              <h2 className="font-medium">Auswahl pro Woche</h2>
+              {/* An/Aus-Schalter: blendet die Wochen-Galerie auf der Startseite ein/aus */}
+              <button
+                onClick={() => setWeeklyEnabled(!weeklyEnabled)}
+                disabled={busy}
+                title={weeklyEnabled ? "Wochen-Galerie ausschalten" : "Wochen-Galerie einschalten"}
+                className={`relative h-7 w-14 flex-none rounded-full border transition ${
+                  weeklyEnabled ? "border-gold bg-gold" : "border-line bg-[#35322c]"
+                }`}
+              >
+                <span
+                  className={`absolute top-0.5 h-[22px] w-[22px] rounded-full bg-paper shadow transition-all ${
+                    weeklyEnabled ? "left-[30px]" : "left-0.5"
+                  }`}
+                />
+              </button>
+            </div>
+            <p className="mt-1 text-sm text-muted">
+              {weeklyEnabled ? "Wie werden die 4 Bilder gewählt?" : "Ausgeschaltet, die Startseite zeigt keine Wochen-Galerie."}
+            </p>
+            <div className={`mt-4 flex gap-2 ${weeklyEnabled ? "" : "pointer-events-none opacity-40"}`}>
               <button
                 onClick={() => setMode("rotate")}
+                disabled={!weeklyEnabled || busy}
                 className={`flex-1 rounded-xl border px-3 py-2 text-sm ${
                   mode === "rotate" ? "border-gold bg-gold text-paper" : "border-line hover:bg-[#35322c]"
                 }`}
@@ -157,6 +196,7 @@ export default function Dashboard({ initialImages, initialMode, thisWeekIds, nex
               </button>
               <button
                 onClick={() => setMode("random")}
+                disabled={!weeklyEnabled || busy}
                 className={`flex-1 rounded-xl border px-3 py-2 text-sm ${
                   mode === "random" ? "border-gold bg-gold text-paper" : "border-line hover:bg-[#35322c]"
                 }`}
@@ -165,9 +205,11 @@ export default function Dashboard({ initialImages, initialMode, thisWeekIds, nex
               </button>
             </div>
             <p className="mt-3 text-xs text-muted">
-              {mode === "rotate"
-                ? "Der Reihe nach, jede Woche 4 weiter, dann wieder von vorn."
-                : "Jede Woche 4 zufällige Bilder (pro Woche stabil)."}
+              {!weeklyEnabled
+                ? "Schalter an: die Startseite zeigt wieder 4 Bilder pro Woche."
+                : mode === "rotate"
+                  ? "Der Reihe nach, jede Woche 4 weiter, dann wieder von vorn."
+                  : "Jede Woche 4 zufällige Bilder (pro Woche stabil)."}
             </p>
           </div>
 
@@ -193,7 +235,9 @@ export default function Dashboard({ initialImages, initialMode, thisWeekIds, nex
         <section className="mt-10">
           <h2 className="font-medium">Diese Woche live</h2>
           <p className="mt-1 text-sm text-muted">
-            Genau diese 4 Bilder zeigt die Startseite gerade. Wechselt automatisch jeden Montag.
+            {weeklyEnabled
+              ? "Genau diese 4 Bilder zeigt die Startseite gerade. Wechselt automatisch jeden Montag."
+              : "Wochen-Galerie ist ausgeschaltet, die Startseite zeigt diese Bilder gerade nicht."}
           </p>
           <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {images

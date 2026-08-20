@@ -19,19 +19,21 @@ export type ImageItem = {
 export type SelectionMode = "rotate" | "random";
 
 export type Store = {
-  settings: { mode: SelectionMode };
+  // weeklyEnabled: Wochen-Galerie auf der Startseite an/aus (Standard an)
+  settings: { mode: SelectionMode; weeklyEnabled: boolean };
   images: ImageItem[];
 };
 
 const DATA_FILE = path.join(process.cwd(), "data", "store.json");
 
-const EMPTY: Store = { settings: { mode: "rotate" }, images: [] };
+const EMPTY: Store = { settings: { mode: "rotate", weeklyEnabled: true }, images: [] };
 
 export async function readStore(): Promise<Store> {
   try {
     const raw = await fs.readFile(DATA_FILE, "utf8");
     const parsed = JSON.parse(raw) as Store;
-    if (!parsed.settings) parsed.settings = { mode: "rotate" };
+    if (!parsed.settings) parsed.settings = { mode: "rotate", weeklyEnabled: true };
+    if (typeof parsed.settings.weeklyEnabled !== "boolean") parsed.settings.weeklyEnabled = true;
     if (!Array.isArray(parsed.images)) parsed.images = [];
     return parsed;
   } catch {

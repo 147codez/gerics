@@ -75,17 +75,22 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Galerie der Woche (zweiter Bildschirm) */}
-      <section id="galerie" className="mx-auto max-w-[1500px] scroll-mt-24 px-8 pb-20 pt-6">
-        <div className="mb-6 flex flex-wrap items-baseline justify-between gap-2">
-          <h2 className="font-serif text-2xl text-gold">{d.galleryTitle}</h2>
-          <span className="text-sm text-muted">{d.gallerySub}</span>
-        </div>
-        <Gallery images={weekly} comingSoon={t(lang).gallery.comingSoon} />
-      </section>
+      {/* Galerie der Woche (zweiter Bildschirm), per Dashboard-Schalter abschaltbar */}
+      {store.settings.weeklyEnabled ? (
+        <section id="galerie" className="mx-auto max-w-[1500px] scroll-mt-24 px-8 pb-20 pt-6">
+          <div className="mb-6 flex flex-wrap items-baseline justify-between gap-2">
+            <h2 className="font-serif text-2xl text-gold">{d.galleryTitle}</h2>
+            <span className="text-sm text-muted">{d.gallerySub}</span>
+          </div>
+          <Gallery images={weekly} comingSoon={t(lang).gallery.comingSoon} />
+        </section>
+      ) : null}
 
-      {/* Vintage-Karte: Flickr-Archiv */}
-      <section className="mx-auto max-w-[1500px] px-8 pb-20">
+      {/* Vintage-Karte: Flickr-Archiv (übernimmt den Entdecken-Anker, wenn die Wochen-Galerie aus ist) */}
+      <section
+        id={store.settings.weeklyEnabled ? undefined : "galerie"}
+        className="mx-auto max-w-[1500px] scroll-mt-24 px-8 pb-20"
+      >
         <FlickrCard lang={lang} />
       </section>
 

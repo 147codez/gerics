@@ -8,12 +8,19 @@ export async function POST(req: Request) {
   if (!isAuthed()) return NextResponse.json({ error: "Nicht angemeldet" }, { status: 401 });
 
   const body = await req.json().catch(() => ({}));
-  const mode = body.mode as SelectionMode;
-  if (mode !== "rotate" && mode !== "random") {
-    return NextResponse.json({ error: "Ungültiger Modus" }, { status: 400 });
-  }
   const store = await readStore();
-  store.settings.mode = mode;
+
+  if (body.mode !== undefined) {
+    const mode = body.mode as SelectionMode;
+    if (mode !== "rotate" && mode !== "random") {
+      return NextResponse.json({ error: "Ungültiger Modus" }, { status: 400 });
+    }
+    store.settings.mode = mode;
+  }
+  if (typeof body.weeklyEnabled === "boolean") {
+    store.settings.weeklyEnabled = body.weeklyEnabled;
+  }
+
   await writeStore(store);
-  return NextResponse.json({ ok: true, mode });
+  return NextResponse.json({ ok: true, settings: store.settings });
 }
