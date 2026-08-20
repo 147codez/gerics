@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import SlotGrid from "@/components/SlotGrid";
 import { readStore, imagesByCategory, CATEGORIES } from "@/lib/store";
 import { t } from "@/lib/i18n";
 import { getLang } from "@/lib/lang";
@@ -42,36 +43,8 @@ export default async function GaleriePage() {
                   </Link>
                 </div>
 
-                {/* 5 feste Slots pro Kategorie, leere Slots als Platzhalter */}
-                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-                  {Array.from({ length: SLOTS }).map((_, i) => {
-                    const img = images[i];
-                    return img ? (
-                      <Link
-                        key={img.id}
-                        href={`/galerie/${c}`}
-                        className="group block overflow-hidden rounded-[14px] border border-line/60 bg-[#35322c]"
-                        style={{ aspectRatio: "4 / 3" }}
-                      >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={img.file}
-                          alt={img.title || d.categories[c]}
-                          loading="lazy"
-                          className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
-                        />
-                      </Link>
-                    ) : (
-                      <div
-                        key={`empty-${i}`}
-                        style={{ aspectRatio: "4 / 3" }}
-                        className="flex items-center justify-center rounded-[14px] border border-line/40 bg-[#35322c] text-sm text-muted"
-                      >
-                        {d.gallery.comingSoon}
-                      </div>
-                    );
-                  })}
-                </div>
+                {/* 5 feste Slots pro Kategorie, Klick öffnet die Gross-Ansicht */}
+                <SlotGrid images={images} comingSoon={d.gallery.comingSoon} alt={d.categories[c]} />
               </div>
             );
           })}
