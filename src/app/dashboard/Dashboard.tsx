@@ -252,7 +252,7 @@ export default function Dashboard({ initialImages, initialMode, thisWeekIds, nex
                         <div
                           key={img.id}
                           style={{ aspectRatio: "4 / 3" }}
-                          className="overflow-hidden rounded-xl border border-line bg-[#35322c]"
+                          className="group relative overflow-hidden rounded-xl border border-line bg-[#35322c]"
                         >
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
@@ -260,6 +260,14 @@ export default function Dashboard({ initialImages, initialMode, thisWeekIds, nex
                             alt={img.title || ""}
                             className="h-full w-full object-cover"
                           />
+                          <button
+                            onClick={() => setEditing(img)}
+                            disabled={busy}
+                            title="Zuschneiden / Format / Auflösung"
+                            className="absolute right-1.5 top-1.5 rounded-lg bg-black/55 px-2 py-1 text-sm text-white opacity-0 backdrop-blur-sm transition hover:bg-black/75 focus:opacity-100 group-hover:opacity-100"
+                          >
+                            ✎
+                          </button>
                         </div>
                       ) : (
                         <div
