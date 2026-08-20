@@ -296,85 +296,90 @@ export default function Dashboard({ initialImages, initialMode, thisWeekIds, nex
           <h2 className="font-medium">Alle Bilder im Ordner</h2>
           <p className="mt-1 text-sm text-muted">Reihenfolge bestimmt (bei „Rotierend") die Abfolge.</p>
 
-          <div className="mt-4 space-y-3">
+          {/* Kompaktes Raster statt breiter Zeilen: spart Platz und Scrollen */}
+          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {images.map((img, idx) => (
-              <div
-                key={img.id}
-                className="flex items-center gap-4 rounded-xl border border-line bg-[#312d27] p-3"
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={img.file}
-                  alt={img.title || ""}
-                  className="h-16 w-16 flex-none rounded-lg object-cover bg-[#35322c]"
-                />
-                <div className="min-w-0 flex-1">
-                  <input
-                    defaultValue={img.title}
-                    placeholder="Titel (optional)"
-                    onBlur={(e) => {
-                      if (e.target.value !== img.title) rename(img.id, e.target.value);
-                    }}
-                    className="w-full rounded-lg border border-line bg-paper px-3 py-1.5 text-sm text-ink outline-none placeholder:text-muted focus:border-gold"
+              <div key={img.id} className="rounded-xl border border-line bg-[#312d27] p-2">
+                <div className="relative">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={img.file}
+                    alt={img.title || ""}
+                    style={{ aspectRatio: "4 / 3" }}
+                    className="w-full rounded-lg bg-[#35322c] object-cover"
                   />
-                  <div className="mt-1 flex flex-wrap items-center gap-1.5 text-xs">
-                    <select
-                      defaultValue={img.category || ""}
-                      onChange={(e) => setCategory(img.id, e.target.value)}
-                      className="rounded-lg border border-line bg-paper px-2 py-1 text-xs text-ink outline-none focus:border-gold"
-                      title="Galerie-Kategorie"
-                    >
-                      <option value="">Keine Kategorie</option>
-                      {CATEGORIES.map((c) => (
-                        <option key={c} value={c}>
-                          {c.charAt(0).toUpperCase() + c.slice(1)}
-                        </option>
-                      ))}
-                    </select>
-                    <span className="text-muted">
-                      {img.w && img.h ? `${img.w}×${img.h}px` : "Grösse unbekannt"}
-                    </span>
+                  <div className="absolute left-1 top-1 flex gap-1">
                     {thisWeek.has(img.id) ? (
-                      <span className="rounded bg-green-100 px-1.5 py-0.5 text-green-800">Diese Woche</span>
+                      <span className="rounded bg-green-100 px-1.5 py-0.5 text-[10px] text-green-800">
+                        Diese Woche
+                      </span>
                     ) : null}
                     {nextWeek.has(img.id) ? (
-                      <span className="rounded bg-amber-100 px-1.5 py-0.5 text-amber-800">Nächste Woche</span>
+                      <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[10px] text-amber-800">
+                        Nächste Woche
+                      </span>
                     ) : null}
                   </div>
                 </div>
-                <div className="flex flex-none items-center gap-1">
-                  <button
-                    onClick={() => setEditing(img)}
-                    disabled={busy}
-                    className="rounded-lg border border-line px-2 py-1 text-sm hover:bg-[#35322c]"
-                    title="Zuschneiden / Format"
-                  >
-                    ✎
-                  </button>
-                  <button
-                    onClick={() => move(img.id, "up")}
-                    disabled={idx === 0 || busy}
-                    className="rounded-lg border border-line px-2 py-1 text-sm disabled:opacity-30"
-                    title="Nach oben"
-                  >
-                    ↑
-                  </button>
-                  <button
-                    onClick={() => move(img.id, "down")}
-                    disabled={idx === images.length - 1 || busy}
-                    className="rounded-lg border border-line px-2 py-1 text-sm disabled:opacity-30"
-                    title="Nach unten"
-                  >
-                    ↓
-                  </button>
-                  <button
-                    onClick={() => remove(img.id)}
-                    disabled={busy}
-                    className="rounded-lg border border-line px-2 py-1 text-sm text-red-700 hover:bg-red-50"
-                    title="Löschen"
-                  >
-                    ✕
-                  </button>
+                <input
+                  defaultValue={img.title}
+                  placeholder="Titel (optional)"
+                  onBlur={(e) => {
+                    if (e.target.value !== img.title) rename(img.id, e.target.value);
+                  }}
+                  className="mt-2 w-full rounded-lg border border-line bg-paper px-2 py-1 text-xs text-ink outline-none placeholder:text-muted focus:border-gold"
+                />
+                <select
+                  defaultValue={img.category || ""}
+                  onChange={(e) => setCategory(img.id, e.target.value)}
+                  className="mt-1.5 w-full rounded-lg border border-line bg-paper px-2 py-1 text-xs text-ink outline-none focus:border-gold"
+                  title="Galerie-Kategorie"
+                >
+                  <option value="">Keine Kategorie</option>
+                  {CATEGORIES.map((c) => (
+                    <option key={c} value={c}>
+                      {c.charAt(0).toUpperCase() + c.slice(1)}
+                    </option>
+                  ))}
+                </select>
+                <div className="mt-1.5 flex items-center justify-between gap-1">
+                  <span className="truncate text-[10px] text-muted">
+                    {img.w && img.h ? `${img.w}×${img.h}` : "?"}
+                  </span>
+                  <div className="flex flex-none items-center gap-1">
+                    <button
+                      onClick={() => setEditing(img)}
+                      disabled={busy}
+                      className="rounded-md border border-line px-1.5 py-0.5 text-xs hover:bg-[#35322c]"
+                      title="Zuschneiden / Format / Auflösung"
+                    >
+                      ✎
+                    </button>
+                    <button
+                      onClick={() => move(img.id, "up")}
+                      disabled={idx === 0 || busy}
+                      className="rounded-md border border-line px-1.5 py-0.5 text-xs disabled:opacity-30"
+                      title="Nach vorne"
+                    >
+                      ↑
+                    </button>
+                    <button
+                      onClick={() => move(img.id, "down")}
+                      disabled={idx === images.length - 1 || busy}
+                      className="rounded-md border border-line px-1.5 py-0.5 text-xs disabled:opacity-30"
+                      title="Nach hinten"
+                    >
+                      ↓
+                    </button>
+                    <button
+                      onClick={() => remove(img.id)}
+                      disabled={busy}
+                      className="rounded-md border border-line px-1.5 py-0.5 text-xs text-red-700 hover:bg-red-50"
+                      title="Löschen"
+                    >
+                      ✕
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
