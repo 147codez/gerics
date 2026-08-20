@@ -45,6 +45,7 @@ export default function Dashboard({
   const [msg, setMsg] = useState("");
   const [zoom, setZoom] = useState(false);
   const [editing, setEditing] = useState<ImageItem | null>(null);
+  const [dragId, setDragId] = useState<string | null>(null);
 
   const images = initialImages;
   const mode = initialMode;
@@ -117,6 +118,50 @@ export default function Dashboard({
       body: JSON.stringify({ title }),
     });
     router.refresh();
+  }
+
+  // Neue Reihenfolge einer Bild-Gruppe speichern (ganze Liste oder Kategorie-Teilmenge).
+  async function reorder(ids: string[]) {
+    setBusy(true);
+    await fetch("/api/images/reorder", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ids }),
+    });
+    setBusy(false);
+    router.refresh();
+  }
+
+  // Drop-Ziel in einer Kategorie: gleiche Kategorie = umsortieren, andere = verschieben.
+  async function dropOnCategory(cat: string, slotIndex: number) {
+    const dragged = images.find((i) => i.id === dragId);
+    setDragId(null);
+    if (!dragged) return;
+    if ((dragged.category || "") !== cat) {
+      await setCategory(dragged.id, cat);
+      return;
+    }
+    const catImgs = images.filter((i) => (i.category || "") === cat);
+    const from = catImgs.findIndex((i) => i.id === dragged.id);
+    const to = Math.min(slotIndex, catImgs.length - 1);
+    if (from === -1 || to === from) return;
+    const arr = [...catImgs];
+    arr.splice(from, 1);
+    arr.splice(to, 0, dragged);
+    await reorder(arr.map((i) => i.id));
+  }
+
+  // Drop-Ziel in der Gesamtliste: globale Reihenfolge ändern.
+  async function dropOnGrid(targetIdx: number) {
+    const dragged = images.find((i) => i.id === dragId);
+    setDragId(null);
+    if (!dragged) return;
+    const from = images.findIndex((i) => i.id === dragged.id);
+    if (from === -1 || from === targetIdx) return;
+    const arr = [...images];
+    arr.splice(from, 1);
+    arr.splice(targetIdx, 0, dragged);
+    await reorder(arr.map((i) => i.id));
   }
 
   async function setCategory(id: string, category: string) {
@@ -257,7 +302,8 @@ export default function Dashboard({
           <h2 className="font-medium">Galerie-Kategorien</h2>
           <p className="mt-1 text-sm text-muted">
             Die ersten 5 Bilder pro Kategorie erscheinen als Slots auf der Galerie-Seite. Upload lädt
-            direkt in die Kategorie.
+            direkt in die Kategorie. Bilder lassen sich per Ziehen umsortieren oder in eine andere
+            Kategorie verschieben.
           </p>
           <div className="mt-4 space-y-4">
             {CATEGORIES.map((c) => {
@@ -296,12 +342,26 @@ export default function Dashboard({
                         <div
                           key={img.id}
                           style={{ aspectRatio: "4 / 3" }}
-                          className="group relative overflow-hidden rounded-xl border border-line bg-[#35322c]"
+                          draggable
+                          onDragStart={(e) => {
+                            setDragId(img.id);
+                            e.dataTransfer.effectAllowed = "move";
+                          }}
+                          onDragEnd={() => setDragId(null)}
+                          onDragOver={(e) => e.preventDefault()}
+                          onDrop={(e) => {
+                            e.preventDefault();
+                            dropOnCategory(c, i);
+                          }}
+                          className={`group relative cursor-grab overflow-hidden rounded-xl border bg-[#35322c] ${
+                            dragId && dragId !== img.id ? "border-gold/60" : "border-line"
+                          }`}
                         >
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={img.file}
                             alt={img.title || ""}
+                            draggable={false}
                             className="h-full w-full object-cover"
                           />
                           <div className="absolute right-1.5 top-1.5 flex gap-1 opacity-0 transition focus-within:opacity-100 group-hover:opacity-100">
@@ -327,9 +387,16 @@ export default function Dashboard({
                         <div
                           key={`empty-${i}`}
                           style={{ aspectRatio: "4 / 3" }}
-                          className="flex items-center justify-center rounded-xl border border-dashed border-line/60 text-xs text-muted"
+                          onDragOver={(e) => e.preventDefault()}
+                          onDrop={(e) => {
+                            e.preventDefault();
+                            dropOnCategory(c, i);
+                          }}
+                          className={`flex items-center justify-center rounded-xl border border-dashed text-xs text-muted ${
+                            dragId ? "border-gold/60 text-gold" : "border-line/60"
+                          }`}
                         >
-                          Bild folgt
+                          {dragId ? "Hierhin ziehen" : "Bild folgt"}
                         </div>
                       );
                     })}
@@ -348,17 +415,36 @@ export default function Dashboard({
         {/* Alle Bilder */}
         <section className="mt-10">
           <h2 className="font-medium">Alle Bilder im Ordner</h2>
-          <p className="mt-1 text-sm text-muted">Reihenfolge bestimmt (bei „Rotierend") die Abfolge.</p>
+          <p className="mt-1 text-sm text-muted">
+            Reihenfolge bestimmt (bei „Rotierend") die Abfolge. Per Ziehen oder ↑↓ umsortieren.
+          </p>
 
           {/* Kompaktes Raster statt breiter Zeilen: spart Platz und Scrollen */}
           <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {images.map((img, idx) => (
-              <div key={img.id} className="rounded-xl border border-line bg-[#312d27] p-2">
+              <div
+                key={img.id}
+                draggable
+                onDragStart={(e) => {
+                  setDragId(img.id);
+                  e.dataTransfer.effectAllowed = "move";
+                }}
+                onDragEnd={() => setDragId(null)}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  dropOnGrid(idx);
+                }}
+                className={`cursor-grab rounded-xl border bg-[#312d27] p-2 ${
+                  dragId && dragId !== img.id ? "border-gold/60" : "border-line"
+                }`}
+              >
                 <div className="relative">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={img.file}
                     alt={img.title || ""}
+                    draggable={false}
                     style={{ aspectRatio: "4 / 3" }}
                     className="w-full rounded-lg bg-[#35322c] object-cover"
                   />
