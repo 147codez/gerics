@@ -13,6 +13,10 @@ type Dict = {
     formTitle: string;
     serviceLabel: string;
     dateLabel: string;
+    timeLabel: string;
+    availableLabel: string;
+    invalidDay: string;
+    dayNames: string[]; // Index = JS getDay(): 0=So .. 6=Sa
     note: string;
   };
   categories: { sport: string; fahrzeuge: string; natur: string; architektur: string };
@@ -110,7 +114,11 @@ export const dict: Record<Lang, Dict> = {
       cta: "Termin anfragen",
       formTitle: "Anfrage senden",
       serviceLabel: "Dienstleistung",
-      dateLabel: "Wunschtermin (optional)",
+      dateLabel: "Wunschtermin",
+      timeLabel: "Uhrzeit",
+      availableLabel: "Verfügbar",
+      invalidDay: "An diesem Tag nicht verfügbar, bitte anderes Datum wählen.",
+      dayNames: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
       note: "Unverbindliche Anfrage, ich melde mich persönlich zurück.",
     },
     categories: { sport: "Sport", fahrzeuge: "Fahrzeuge", natur: "Natur", architektur: "Architektur" },
@@ -251,7 +259,11 @@ export const dict: Record<Lang, Dict> = {
       cta: "Request a date",
       formTitle: "Send request",
       serviceLabel: "Service",
-      dateLabel: "Preferred date (optional)",
+      dateLabel: "Preferred date",
+      timeLabel: "Time",
+      availableLabel: "Available",
+      invalidDay: "Not available on this day, please pick another date.",
+      dayNames: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
       note: "Non-binding request, I'll get back to you personally.",
     },
     categories: { sport: "Sports", fahrzeuge: "Vehicles", natur: "Nature", architektur: "Architecture" },

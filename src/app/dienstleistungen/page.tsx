@@ -2,18 +2,21 @@ import type { Metadata } from "next";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import ServiceBooking from "@/components/ServiceBooking";
+import { readStore, sortedServices } from "@/lib/store";
 import { t } from "@/lib/i18n";
 import { getLang } from "@/lib/lang";
 
-export const dynamic = "force-dynamic"; // Sprache kommt aus dem Cookie
+export const dynamic = "force-dynamic"; // Sprache aus Cookie, Angebote aus dem CMS
 
 export function generateMetadata(): Metadata {
   return { title: t(getLang()).services.title };
 }
 
-export default function DienstleistungenPage() {
+export default async function DienstleistungenPage() {
   const lang = getLang();
   const d = t(lang).services;
+  const store = await readStore();
+  const services = sortedServices(store).filter((s) => s.active);
 
   return (
     <main className="min-h-screen">
@@ -26,7 +29,7 @@ export default function DienstleistungenPage() {
         </h1>
 
         <div className="mt-12">
-          <ServiceBooking lang={lang} />
+          <ServiceBooking lang={lang} services={services} availability={store.availability} />
         </div>
       </section>
 

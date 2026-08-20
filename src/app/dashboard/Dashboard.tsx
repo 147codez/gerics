@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CATEGORIES } from "@/lib/categories";
-import type { ImageItem, SelectionMode } from "@/lib/store";
+import type { Availability, ImageItem, SelectionMode, ServiceItem } from "@/lib/store";
 import { SITE_NAME } from "@/lib/site";
 import ImageEditor from "./ImageEditor";
 
@@ -13,7 +13,21 @@ type Props = {
   initialWeeklyEnabled: boolean;
   thisWeekIds: string[];
   nextWeekIds: string[];
+  initialServices: ServiceItem[];
+  initialAvailability: Availability;
+  servicesUpdatedAt: string;
 };
+
+// Wochentage in Anzeige-Reihenfolge (JS getDay: 0=So)
+const WOCHENTAGE: { n: number; l: string }[] = [
+  { n: 1, l: "Mo" },
+  { n: 2, l: "Di" },
+  { n: 3, l: "Mi" },
+  { n: 4, l: "Do" },
+  { n: 5, l: "Fr" },
+  { n: 6, l: "Sa" },
+  { n: 0, l: "So" },
+];
 
 // Liest die echten Pixelmasse eines Bildes im Browser aus.
 function readDimensions(file: File): Promise<{ w: number; h: number }> {
@@ -38,6 +52,9 @@ export default function Dashboard({
   initialWeeklyEnabled,
   thisWeekIds,
   nextWeekIds,
+  initialServices,
+  initialAvailability,
+  servicesUpdatedAt,
 }: Props) {
   const router = useRouter();
   const fileRef = useRef<HTMLInputElement>(null);
@@ -46,6 +63,9 @@ export default function Dashboard({
   const [zoom, setZoom] = useState(false);
   const [editing, setEditing] = useState<ImageItem | null>(null);
   const [dragId, setDragId] = useState<string | null>(null);
+  const [tab, setTab] = useState<"bilder" | "cms">("bilder");
+  const [av, setAv] = useState<Availability>(initialAvailability);
+  const services = initialServices;
 
   const images = initialImages;
   const mode = initialMode;
@@ -181,6 +201,50 @@ export default function Dashboard({
     router.refresh();
   }
 
+  // --- CMS: Dienstleistungen & Verfügbarkeit ---
+
+  async function patchService(id: string, data: Record<string, unknown>) {
+    await fetch(`/api/services/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    router.refresh();
+  }
+
+  async function addService() {
+    setBusy(true);
+    await fetch("/api/services", { method: "POST" });
+    setBusy(false);
+    router.refresh();
+  }
+
+  async function removeService(id: string) {
+    if (!confirm("Diese Dienstleistung wirklich löschen?")) return;
+    setBusy(true);
+    await fetch(`/api/services/${id}`, { method: "DELETE" });
+    setBusy(false);
+    router.refresh();
+  }
+
+  async function saveAvailability() {
+    setBusy(true);
+    await fetch("/api/settings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ availability: av }),
+    });
+    setBusy(false);
+    router.refresh();
+  }
+
+  function toggleDay(n: number) {
+    setAv((a) => ({
+      ...a,
+      days: a.days.includes(n) ? a.days.filter((d) => d !== n) : [...a.days, n],
+    }));
+  }
+
   async function logout() {
     await fetch("/api/logout", { method: "POST" });
     router.push("/login");
@@ -205,6 +269,28 @@ export default function Dashboard({
       </header>
 
       <div className="mx-auto max-w-5xl px-6 pb-20">
+        {/* Tab-Leiste: Bilder / Dienstleistungen (CMS) */}
+        <div className="mb-8 flex gap-2">
+          <button
+            onClick={() => setTab("bilder")}
+            className={`rounded-xl border px-4 py-2 text-sm ${
+              tab === "bilder" ? "border-gold bg-gold text-paper" : "border-line hover:bg-[#35322c]"
+            }`}
+          >
+            Bilder
+          </button>
+          <button
+            onClick={() => setTab("cms")}
+            className={`rounded-xl border px-4 py-2 text-sm ${
+              tab === "cms" ? "border-gold bg-gold text-paper" : "border-line hover:bg-[#35322c]"
+            }`}
+          >
+            Dienstleistungen
+          </button>
+        </div>
+
+        {tab === "bilder" ? (
+        <>
         {/* Modus + Upload */}
         <section className="grid gap-4 sm:grid-cols-2">
           <div className="rounded-2xl border border-line bg-[#312d27] p-5">
@@ -550,6 +636,155 @@ export default function Dashboard({
             ) : null}
           </div>
         </section>
+
+        </>
+        ) : (
+        <div>
+          {/* CMS: Dienstleistungen, Preise, Verfügbarkeit */}
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h2 className="font-medium">Dienstleistungen & Buchung</h2>
+            <span className="text-xs text-muted">
+              {servicesUpdatedAt
+                ? `Gespeichert: ${new Date(servicesUpdatedAt).toLocaleString("de-CH", {
+                    dateStyle: "medium",
+                    timeStyle: "short",
+                  })}`
+                : "Noch nichts gespeichert"}
+            </span>
+          </div>
+          <p className="mt-1 text-sm text-muted">
+            Angebote, Preise und Verfügbarkeit der Dienstleistungs-Seite. Anfragen kommen per E-Mail
+            an info@gerics.ch.
+          </p>
+
+          {/* Verfügbarkeit */}
+          <div className="mt-5 rounded-2xl border border-line bg-[#312d27] p-5">
+            <h3 className="font-medium">Verfügbarkeit</h3>
+            <p className="mt-1 text-sm text-muted">Buchbare Wochentage, Zeitfenster und Termin-Länge.</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {WOCHENTAGE.map((w) => (
+                <button
+                  key={w.n}
+                  onClick={() => toggleDay(w.n)}
+                  className={`rounded-xl border px-3 py-2 text-sm ${
+                    av.days.includes(w.n)
+                      ? "border-gold bg-gold text-paper"
+                      : "border-line hover:bg-[#35322c]"
+                  }`}
+                >
+                  {w.l}
+                </button>
+              ))}
+            </div>
+            <div className="mt-4 flex flex-wrap items-center gap-3 text-sm">
+              <label className="flex items-center gap-2">
+                Von
+                <input
+                  type="time"
+                  value={av.from}
+                  onChange={(e) => setAv({ ...av, from: e.target.value })}
+                  className="rounded-lg border border-line bg-paper px-2 py-1.5 text-ink outline-none focus:border-gold"
+                />
+              </label>
+              <label className="flex items-center gap-2">
+                bis
+                <input
+                  type="time"
+                  value={av.to}
+                  onChange={(e) => setAv({ ...av, to: e.target.value })}
+                  className="rounded-lg border border-line bg-paper px-2 py-1.5 text-ink outline-none focus:border-gold"
+                />
+              </label>
+              <span className="text-muted">Termin-Länge:</span>
+              {[30, 60, 90, 120].map((m) => (
+                <button
+                  key={m}
+                  onClick={() => setAv({ ...av, slotMinutes: m })}
+                  className={`rounded-xl border px-3 py-1.5 ${
+                    av.slotMinutes === m
+                      ? "border-gold bg-gold text-paper"
+                      : "border-line hover:bg-[#35322c]"
+                  }`}
+                >
+                  {m} Min
+                </button>
+              ))}
+              <button
+                onClick={saveAvailability}
+                disabled={busy || av.days.length === 0}
+                className="ml-auto rounded-xl bg-gold px-4 py-2 font-medium text-paper hover:brightness-105 disabled:opacity-60"
+              >
+                Speichern
+              </button>
+            </div>
+          </div>
+
+          {/* Angebote */}
+          <div className="mt-5 space-y-3">
+            {services.map((s) => (
+              <div key={s.id} className="rounded-2xl border border-line bg-[#312d27] p-4">
+                <div className="flex flex-wrap items-center gap-2">
+                  <input
+                    defaultValue={s.title}
+                    placeholder="Name"
+                    onBlur={(e) => {
+                      if (e.target.value !== s.title) patchService(s.id, { title: e.target.value });
+                    }}
+                    className="min-w-[220px] flex-1 rounded-lg border border-line bg-paper px-3 py-2 text-sm text-ink outline-none placeholder:text-muted focus:border-gold"
+                  />
+                  <input
+                    defaultValue={s.price}
+                    placeholder="Preis, z.B. ab CHF 250"
+                    onBlur={(e) => {
+                      if (e.target.value !== s.price) patchService(s.id, { price: e.target.value });
+                    }}
+                    className="w-48 rounded-lg border border-line bg-paper px-3 py-2 text-sm text-ink outline-none placeholder:text-muted focus:border-gold"
+                  />
+                  <button
+                    onClick={() => patchService(s.id, { active: !s.active })}
+                    className={`rounded-xl border px-3 py-2 text-sm ${
+                      s.active
+                        ? "border-gold bg-gold text-paper"
+                        : "border-line text-muted hover:bg-[#35322c]"
+                    }`}
+                    title={s.active ? "Auf der Website sichtbar" : "Versteckt"}
+                  >
+                    {s.active ? "Aktiv" : "Inaktiv"}
+                  </button>
+                  <button
+                    onClick={() => removeService(s.id)}
+                    disabled={busy}
+                    className="rounded-xl border border-line px-3 py-2 text-sm text-red-700 hover:bg-red-50"
+                    title="Löschen"
+                  >
+                    ✕
+                  </button>
+                </div>
+                <textarea
+                  defaultValue={s.desc}
+                  placeholder="Beschreibung"
+                  rows={2}
+                  onBlur={(e) => {
+                    if (e.target.value !== s.desc) patchService(s.id, { desc: e.target.value });
+                  }}
+                  className="mt-2 w-full rounded-lg border border-line bg-paper px-3 py-2 text-sm text-ink outline-none placeholder:text-muted focus:border-gold"
+                />
+              </div>
+            ))}
+          </div>
+          <button
+            onClick={addService}
+            disabled={busy}
+            className="mt-4 rounded-xl border border-line px-4 py-2 text-sm hover:bg-[#35322c]"
+          >
+            + Neue Dienstleistung
+          </button>
+          <p className="mt-2 text-xs text-muted">
+            Neue Angebote starten als „Inaktiv" und erscheinen erst nach dem Aktivieren auf der
+            Website.
+          </p>
+        </div>
+        )}
 
         {/* Persönliche Erinnerung, nur für dich sichtbar */}
         <section className="mt-16 border-t border-line pt-10 text-center">

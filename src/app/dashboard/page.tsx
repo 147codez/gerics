@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { isAuthed } from "@/lib/auth";
-import { readStore, sortedImages } from "@/lib/store";
+import { readStore, sortedImages, sortedServices } from "@/lib/store";
 import { selectWeekly, weekIndex } from "@/lib/rotation";
 import Dashboard from "./Dashboard";
 
@@ -22,6 +22,9 @@ export default async function DashboardPage() {
       initialWeeklyEnabled={store.settings.weeklyEnabled}
       thisWeekIds={thisWeek}
       nextWeekIds={nextWeek}
+      initialServices={sortedServices(store)}
+      initialAvailability={store.availability}
+      servicesUpdatedAt={store.servicesUpdatedAt}
     />
   );
 }

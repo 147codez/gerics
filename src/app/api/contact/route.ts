@@ -17,6 +17,7 @@ export async function POST(req: Request) {
   // Optional: Buchungsanfrage von /dienstleistungen
   const service = String(body.service || "").trim();
   const date = String(body.date || "").trim();
+  const time = String(body.time || "").trim();
 
   if (!firstName || !lastName || !email || !message) {
     return NextResponse.json({ error: "Pflichtfelder fehlen" }, { status: 400 });
@@ -38,7 +39,9 @@ export async function POST(req: Request) {
   const text = [
     service ? "Neue Buchungsanfrage über gerics.ch" : "Neue Kontaktanfrage über gerics.ch",
     "",
-    ...(service ? [`Dienstleistung: ${service}`, `Wunschtermin: ${date || "-"}`] : []),
+    ...(service
+      ? [`Dienstleistung: ${service}`, `Wunschtermin: ${date ? `${date}${time ? ` ${time}` : ""}` : "-"}`]
+      : []),
     `Vorname: ${firstName}`,
     `Name: ${lastName}`,
     `E-Mail: ${email}`,
