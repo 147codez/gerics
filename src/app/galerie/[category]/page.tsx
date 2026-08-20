@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
-import Gallery from "@/components/Gallery";
+import ScrollGallery from "@/components/ScrollGallery";
 import { readStore, imagesByCategory, isCategory } from "@/lib/store";
 import { t } from "@/lib/i18n";
 import { getLang } from "@/lib/lang";
@@ -40,7 +40,7 @@ export default async function KategoriePage({ params }: Props) {
         </div>
 
         <div className="mt-10">
-          <Gallery images={images} comingSoon={d.gallery.comingSoon} />
+          <ScrollGallery images={images} comingSoon={d.gallery.comingSoon} />
         </div>
       </section>
 
