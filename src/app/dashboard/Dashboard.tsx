@@ -288,9 +288,31 @@ export default function Dashboard({
             {images
               .filter((i) => thisWeek.has(i.id))
               .map((i) => (
-                <div key={i.id} className="overflow-hidden rounded-xl border border-line bg-[#312d27]">
+                <div
+                  key={i.id}
+                  draggable
+                  onDragStart={(e) => {
+                    setDragId(i.id);
+                    e.dataTransfer.effectAllowed = "move";
+                  }}
+                  onDragEnd={() => setDragId(null)}
+                  className="group relative cursor-grab overflow-hidden rounded-xl border border-line bg-[#312d27]"
+                >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={i.file} alt={i.title || ""} className="h-32 w-full object-contain bg-[#35322c]" />
+                  <img
+                    src={i.file}
+                    alt={i.title || ""}
+                    draggable={false}
+                    className="h-32 w-full object-contain bg-[#35322c]"
+                  />
+                  <button
+                    onClick={() => setEditing(i)}
+                    disabled={busy}
+                    title="Zuschneiden / Format / Auflösung"
+                    className="absolute right-1.5 top-1.5 rounded-lg bg-black/55 px-2 py-1 text-sm text-white opacity-0 backdrop-blur-sm transition hover:bg-black/75 focus:opacity-100 group-hover:opacity-100"
+                  >
+                    ✎
+                  </button>
                 </div>
               ))}
             {images.length === 0 ? <p className="text-sm text-muted">Noch keine Bilder.</p> : null}

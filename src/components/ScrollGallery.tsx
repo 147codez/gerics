@@ -1,6 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import type { ImageItem } from "@/lib/store";
+import Lightbox from "./Lightbox";
 
 // Galerie als Scroll-Flug: Bilder fliegen beim Scrollen abwechselnd von links
 // und rechts herein (CSS Scroll-Driven Animations, kein JS).
@@ -12,6 +14,8 @@ export default function ScrollGallery({
   images: ImageItem[];
   comingSoon: string;
 }) {
+  const [big, setBig] = useState<ImageItem | null>(null);
+
   if (images.length === 0) {
     return (
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4" aria-hidden>
@@ -58,7 +62,8 @@ export default function ScrollGallery({
               height={img.h || undefined}
               loading="lazy"
               draggable={false}
-              className="w-full rounded-2xl border-[8px] border-[#efe7d3] object-cover shadow-[0_18px_45px_rgba(0,0,0,0.5)]"
+              onClick={() => setBig(img)}
+              className="w-full cursor-zoom-in rounded-2xl border-[8px] border-[#efe7d3] object-cover shadow-[0_18px_45px_rgba(0,0,0,0.5)] transition duration-300 hover:scale-[1.015]"
             />
             {img.title ? (
               <figcaption className="mt-3 text-center font-serif text-sm text-muted">
@@ -68,6 +73,9 @@ export default function ScrollGallery({
           </figure>
         ))}
       </div>
+      {big ? (
+        <Lightbox src={big.file} alt={big.title || "Fotografie"} onClose={() => setBig(null)} />
+      ) : null}
     </div>
   );
 }
