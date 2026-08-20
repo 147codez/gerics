@@ -2,6 +2,7 @@ import Link from "next/link";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import Gallery from "@/components/Gallery";
+import CoverFlow from "@/components/demos/CoverFlow";
 import FlickrCard from "@/components/FlickrCard";
 import { readStore, sortedImages } from "@/lib/store";
 import { selectWeekly } from "@/lib/rotation";
@@ -83,6 +84,13 @@ export default async function Home() {
             <span className="text-sm text-muted">{d.gallerySub}</span>
           </div>
           <Gallery images={weekly} comingSoon={t(lang).gallery.comingSoon} />
+        </section>
+      ) : null}
+
+      {/* Cover-Flow-Karussell über alle Bilder */}
+      {images.length > 0 ? (
+        <section className="mx-auto max-w-[1500px] px-8 pb-20">
+          <CoverFlow images={images} />
         </section>
       ) : null}
 

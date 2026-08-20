@@ -54,18 +54,20 @@ export default function CoverFlow({ images }: { images: ImageItem[] }) {
       <div className="mt-4 flex items-center justify-center gap-4 text-sm text-muted">
         <button
           onClick={() => setCur((c) => Math.max(0, c - 1))}
+          aria-label="Zurück"
           className="rounded-full border border-line px-4 py-1.5 transition hover:border-gold hover:text-gold"
         >
-          ← Zurück
+          ←
         </button>
         <span>
           {cur + 1} / {pics.length}
         </span>
         <button
           onClick={() => setCur((c) => Math.min(pics.length - 1, c + 1))}
+          aria-label="Weiter"
           className="rounded-full border border-line px-4 py-1.5 transition hover:border-gold hover:text-gold"
         >
-          Weiter →
+          →
         </button>
       </div>
     </div>
