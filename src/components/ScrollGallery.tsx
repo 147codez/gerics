@@ -47,7 +47,7 @@ export default function ScrollGallery({
         .heim-einflug.rechts { animation-name: heim-einflug-rechts; }
         @media (prefers-reduced-motion: reduce) { .heim-einflug { animation: none; } }
       `}</style>
-      <div className="space-y-[12vh] py-[4vh]">
+      <div className="space-y-[5vh] py-[2vh]">
         {images.map((img, i) => (
           <figure key={img.id} className={`heim-einflug ${i % 2 ? "rechts ml-auto" : ""} w-[min(620px,85%)]`}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
