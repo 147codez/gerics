@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { CATEGORIES } from "@/lib/categories";
 import type { ImageItem, SelectionMode } from "@/lib/store";
 import { SITE_NAME } from "@/lib/site";
+import ImageEditor from "./ImageEditor";
 
 type Props = {
   initialImages: ImageItem[];
@@ -36,6 +37,7 @@ export default function Dashboard({ initialImages, initialMode, thisWeekIds, nex
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState("");
   const [zoom, setZoom] = useState(false);
+  const [editing, setEditing] = useState<ImageItem | null>(null);
 
   const images = initialImages;
   const mode = initialMode;
@@ -334,6 +336,14 @@ export default function Dashboard({ initialImages, initialMode, thisWeekIds, nex
                 </div>
                 <div className="flex flex-none items-center gap-1">
                   <button
+                    onClick={() => setEditing(img)}
+                    disabled={busy}
+                    className="rounded-lg border border-line px-2 py-1 text-sm hover:bg-[#35322c]"
+                    title="Zuschneiden / Format"
+                  >
+                    ✎
+                  </button>
+                  <button
                     onClick={() => move(img.id, "up")}
                     disabled={idx === 0 || busy}
                     className="rounded-lg border border-line px-2 py-1 text-sm disabled:opacity-30"
@@ -394,6 +404,18 @@ export default function Dashboard({ initialImages, initialMode, thisWeekIds, nex
           </div>
         </section>
       </div>
+
+      {/* Bild-Editor: Zuschnitt, Format, Auflösung */}
+      {editing ? (
+        <ImageEditor
+          image={editing}
+          onClose={() => setEditing(null)}
+          onSaved={() => {
+            setEditing(null);
+            router.refresh();
+          }}
+        />
+      ) : null}
 
       {/* Lightbox: grosse Ansicht */}
       {zoom ? (
