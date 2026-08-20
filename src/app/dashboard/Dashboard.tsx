@@ -42,7 +42,7 @@ export default function Dashboard({ initialImages, initialMode, thisWeekIds, nex
   const thisWeek = new Set(thisWeekIds);
   const nextWeek = new Set(nextWeekIds);
 
-  async function handleFiles(files: FileList | null) {
+  async function handleFiles(files: FileList | null, category = "") {
     if (!files || files.length === 0) return;
     setBusy(true);
     setMsg(`Lade ${files.length} Bild(er) hoch ...`);
@@ -53,6 +53,7 @@ export default function Dashboard({ initialImages, initialMode, thisWeekIds, nex
       fd.append("w", String(w));
       fd.append("h", String(h));
       fd.append("title", "");
+      fd.append("category", category);
       const res = await fetch("/api/images", { method: "POST", body: fd });
       if (!res.ok) {
         setMsg("Fehler beim Hochladen.");
@@ -202,6 +203,81 @@ export default function Dashboard({ initialImages, initialMode, thisWeekIds, nex
                 </div>
               ))}
             {images.length === 0 ? <p className="text-sm text-muted">Noch keine Bilder.</p> : null}
+          </div>
+        </section>
+
+        {/* Galerie-Kategorien: gleiche 5 Slots wie auf der Galerie-Seite */}
+        <section className="mt-10">
+          <h2 className="font-medium">Galerie-Kategorien</h2>
+          <p className="mt-1 text-sm text-muted">
+            Die ersten 5 Bilder pro Kategorie erscheinen als Slots auf der Galerie-Seite. Upload lädt
+            direkt in die Kategorie.
+          </p>
+          <div className="mt-4 space-y-4">
+            {CATEGORIES.map((c) => {
+              const catImages = images.filter((i) => i.category === c);
+              return (
+                <div key={c} className="rounded-2xl border border-line bg-[#312d27] p-5">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <h3 className="font-medium">
+                      {c.charAt(0).toUpperCase() + c.slice(1)}{" "}
+                      <span className="text-xs text-muted">({catImages.length})</span>
+                    </h3>
+                    <label
+                      className={`cursor-pointer rounded-lg bg-gold px-4 py-2 text-sm text-paper ${
+                        busy ? "opacity-60" : "hover:brightness-105"
+                      }`}
+                    >
+                      Bilder hochladen
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        hidden
+                        disabled={busy}
+                        onChange={async (e) => {
+                          const el = e.currentTarget;
+                          await handleFiles(el.files, c);
+                          el.value = "";
+                        }}
+                      />
+                    </label>
+                  </div>
+                  <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-5">
+                    {Array.from({ length: 5 }).map((_, i) => {
+                      const img = catImages[i];
+                      return img ? (
+                        <div
+                          key={img.id}
+                          style={{ aspectRatio: "4 / 3" }}
+                          className="overflow-hidden rounded-xl border border-line bg-[#35322c]"
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={img.file}
+                            alt={img.title || ""}
+                            className="h-full w-full object-cover"
+                          />
+                        </div>
+                      ) : (
+                        <div
+                          key={`empty-${i}`}
+                          style={{ aspectRatio: "4 / 3" }}
+                          className="flex items-center justify-center rounded-xl border border-dashed border-line/60 text-xs text-muted"
+                        >
+                          Bild folgt
+                        </div>
+                      );
+                    })}
+                  </div>
+                  {catImages.length > 5 ? (
+                    <p className="mt-2 text-xs text-muted">
+                      +{catImages.length - 5} weitere auf der Kategorie-Seite
+                    </p>
+                  ) : null}
+                </div>
+              );
+            })}
           </div>
         </section>
 

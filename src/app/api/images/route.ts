@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
 import crypto from "crypto";
-import { readStore, writeStore, sortedImages, type ImageItem } from "@/lib/store";
+import { readStore, writeStore, sortedImages, isCategory, type ImageItem } from "@/lib/store";
 import { isAuthed } from "@/lib/auth";
 import { UPLOADS_DIR, mediaUrl } from "@/lib/uploads";
 
@@ -30,6 +30,7 @@ export async function POST(req: Request) {
   const title = String(form.get("title") || "");
   const w = Number(form.get("w") || 0);
   const h = Number(form.get("h") || 0);
+  const categoryRaw = String(form.get("category") || "");
 
   if (!(file instanceof File)) {
     return NextResponse.json({ error: "Keine Datei" }, { status: 400 });
@@ -55,6 +56,7 @@ export async function POST(req: Request) {
     h: h > 0 ? h : 0,
     title,
     order: maxOrder + 1,
+    category: isCategory(categoryRaw) ? categoryRaw : "",
   };
   store.images.push(item);
   await writeStore(store);
