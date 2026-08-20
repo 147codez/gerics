@@ -238,6 +238,22 @@ export default function Dashboard({
     router.refresh();
   }
 
+  // Textarea wächst beim Tippen/Enter automatisch mit.
+  function autoGrow(el: HTMLTextAreaElement) {
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight + 2}px`;
+  }
+
+  // Haken-Liste normalisieren: jede nicht-leere Zeile bekommt "✓ " vorangestellt.
+  function normalizeFeatures(v: string): string {
+    return v
+      .split("\n")
+      .map((l) => l.trim().replace(/^✓\s*/, ""))
+      .filter(Boolean)
+      .map((l) => `✓ ${l}`)
+      .join("\n");
+  }
+
   function toggleDay(n: number) {
     setAv((a) => ({
       ...a,
@@ -253,7 +269,7 @@ export default function Dashboard({
 
   return (
     <main className="min-h-screen bg-paper text-ink">
-      <header className="mx-auto flex max-w-5xl items-center justify-between px-6 py-6">
+      <header className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6">
         <div>
           <div className="text-lg font-semibold uppercase tracking-brand">{SITE_NAME}</div>
           <div className="text-sm text-muted">Bild-Verwaltung</div>
@@ -268,7 +284,7 @@ export default function Dashboard({
         </div>
       </header>
 
-      <div className="mx-auto max-w-5xl px-6 pb-20">
+      <div className="mx-auto max-w-7xl px-6 pb-20">
         {/* Tab-Leiste: Bilder / Dienstleistungen (CMS) */}
         <div className="mb-8 flex gap-2">
           <button
@@ -711,12 +727,17 @@ export default function Dashboard({
               ))}
               <button
                 onClick={saveAvailability}
-                disabled={busy || av.days.length === 0}
+                disabled={busy}
                 className="ml-auto rounded-xl bg-gold px-4 py-2 font-medium text-paper hover:brightness-105 disabled:opacity-60"
               >
                 Speichern
               </button>
             </div>
+            <p className="mt-3 text-xs text-muted">
+              {av.days.length === 0
+                ? 'Kein Tag gewählt = ausgebucht: die Website zeigt "Zurzeit ausgebucht" statt des Buchungsformulars.'
+                : 'Tipp: alle Tage abwählen und speichern = "Zurzeit ausgebucht" auf der Website.'}
+            </p>
           </div>
 
           {/* Angebote */}
@@ -739,6 +760,15 @@ export default function Dashboard({
                       if (e.target.value !== s.price) patchService(s.id, { price: e.target.value });
                     }}
                     className="w-48 rounded-lg border border-line bg-paper px-3 py-2 text-sm text-ink outline-none placeholder:text-muted focus:border-gold"
+                  />
+                  <input
+                    defaultValue={s.imageCount}
+                    placeholder="Anzahl Bilder, z.B. 30"
+                    onBlur={(e) => {
+                      if (e.target.value !== s.imageCount)
+                        patchService(s.id, { imageCount: e.target.value });
+                    }}
+                    className="w-44 rounded-lg border border-line bg-paper px-3 py-2 text-sm text-ink outline-none placeholder:text-muted focus:border-gold"
                   />
                   <button
                     onClick={() => patchService(s.id, { active: !s.active })}
@@ -764,10 +794,38 @@ export default function Dashboard({
                   defaultValue={s.desc}
                   placeholder="Beschreibung"
                   rows={2}
+                  onInput={(e) => autoGrow(e.currentTarget)}
                   onBlur={(e) => {
                     if (e.target.value !== s.desc) patchService(s.id, { desc: e.target.value });
                   }}
-                  className="mt-2 w-full rounded-lg border border-line bg-paper px-3 py-2 text-sm text-ink outline-none placeholder:text-muted focus:border-gold"
+                  className="mt-2 w-full resize-none rounded-lg border border-line bg-paper px-3 py-2 text-sm text-ink outline-none placeholder:text-muted focus:border-gold"
+                />
+                {/* Inklusive-Leistungen: jede neue Zeile bekommt automatisch einen Haken */}
+                <textarea
+                  defaultValue={s.features}
+                  placeholder="Inklusive-Leistungen, eine pro Zeile (Haken kommt automatisch)"
+                  rows={2}
+                  onInput={(e) => autoGrow(e.currentTarget)}
+                  onFocus={(e) => {
+                    if (!e.currentTarget.value) e.currentTarget.value = "✓ ";
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      const el = e.currentTarget;
+                      const start = el.selectionStart;
+                      const insert = "\n✓ ";
+                      el.value = el.value.slice(0, start) + insert + el.value.slice(el.selectionEnd);
+                      el.setSelectionRange(start + insert.length, start + insert.length);
+                      autoGrow(el);
+                    }
+                  }}
+                  onBlur={(e) => {
+                    const v = normalizeFeatures(e.target.value);
+                    e.target.value = v;
+                    if (v !== s.features) patchService(s.id, { features: v });
+                  }}
+                  className="mt-2 w-full resize-none rounded-lg border border-line bg-paper px-3 py-2 text-sm text-ink outline-none placeholder:text-muted focus:border-gold"
                 />
               </div>
             ))}

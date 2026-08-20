@@ -31,6 +31,7 @@ export default function ServiceBooking({
 }) {
   const d = t(lang).services;
   const f = t(lang).about.form;
+  const fullyBooked = availability.days.length === 0; // keine Tage = ausgebucht
   const slots = buildSlots(availability);
   const dayHint = [1, 2, 3, 4, 5, 6, 0]
     .filter((n) => availability.days.includes(n))
@@ -103,19 +104,49 @@ export default function ServiceBooking({
             }`}
           >
             <h2 className="font-serif text-2xl text-gold">{item.title}</h2>
-            <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">{item.desc}</p>
+            <p className="mt-2 text-sm leading-relaxed text-muted">{item.desc}</p>
+            {/* Haken-Liste: Anzahl Bilder + Inklusive-Leistungen aus dem CMS */}
+            {item.imageCount || item.features ? (
+              <ul className="mt-3 flex-1 space-y-1.5 text-sm text-ink/90">
+                {item.imageCount ? (
+                  <li className="flex gap-2">
+                    <span className="text-gold">✓</span>
+                    {item.imageCount} {d.imagesLabel}
+                  </li>
+                ) : null}
+                {item.features
+                  .split("\n")
+                  .map((l) => l.replace(/^✓\s*/, "").trim())
+                  .filter(Boolean)
+                  .map((l) => (
+                    <li key={l} className="flex gap-2">
+                      <span className="text-gold">✓</span>
+                      {l}
+                    </li>
+                  ))}
+              </ul>
+            ) : (
+              <span className="flex-1" />
+            )}
             {item.price ? <p className="mt-3 text-sm font-medium text-gold">{item.price}</p> : null}
-            <button
-              onClick={() => pick(item.title)}
-              className="mt-5 rounded-full border border-line px-5 py-2 text-sm text-ink transition hover:border-gold hover:text-gold"
-            >
-              {d.cta}
-            </button>
+            {!fullyBooked ? (
+              <button
+                onClick={() => pick(item.title)}
+                className="mt-5 rounded-full border border-line px-5 py-2 text-sm text-ink transition hover:border-gold hover:text-gold"
+              >
+                {d.cta}
+              </button>
+            ) : null}
           </div>
         ))}
       </div>
 
-      {/* Anfrage-Formular */}
+      {/* Ausgebucht: Hinweis statt Formular */}
+      {fullyBooked ? (
+        <div className="mx-auto mt-14 max-w-2xl rounded-2xl border border-gold/40 bg-[#2f2b25] p-8 text-center">
+          <p className="font-serif text-2xl text-gold">{d.fullyBooked}</p>
+        </div>
+      ) : (
       <div id="anfrage" className="mt-14 scroll-mt-28">
         <div className="mx-auto max-w-2xl rounded-2xl border border-line bg-[#2f2b25] p-6 sm:p-8">
           <h2 className="font-serif text-3xl text-gold">{d.formTitle}</h2>
@@ -231,6 +262,7 @@ export default function ServiceBooking({
           </form>
         </div>
       </div>
+      )}
     </div>
   );
 }

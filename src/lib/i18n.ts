@@ -17,6 +17,8 @@ type Dict = {
     availableLabel: string;
     invalidDay: string;
     dayNames: string[]; // Index = JS getDay(): 0=So .. 6=Sa
+    imagesLabel: string;
+    fullyBooked: string;
     note: string;
   };
   categories: { sport: string; fahrzeuge: string; natur: string; architektur: string };
@@ -119,6 +121,8 @@ export const dict: Record<Lang, Dict> = {
       availableLabel: "Verfügbar",
       invalidDay: "An diesem Tag nicht verfügbar, bitte anderes Datum wählen.",
       dayNames: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+      imagesLabel: "Bilder",
+      fullyBooked: "Zurzeit ausgebucht. Schauen Sie bald wieder vorbei oder schreiben Sie an info@gerics.ch.",
       note: "Unverbindliche Anfrage, ich melde mich persönlich zurück.",
     },
     categories: { sport: "Sport", fahrzeuge: "Fahrzeuge", natur: "Natur", architektur: "Architektur" },
@@ -264,6 +268,8 @@ export const dict: Record<Lang, Dict> = {
       availableLabel: "Available",
       invalidDay: "Not available on this day, please pick another date.",
       dayNames: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+      imagesLabel: "images",
+      fullyBooked: "Fully booked at the moment. Check back soon or email info@gerics.ch.",
       note: "Non-binding request, I'll get back to you personally.",
     },
     categories: { sport: "Sports", fahrzeuge: "Vehicles", natur: "Nature", architektur: "Architecture" },

@@ -16,6 +16,8 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
   if (typeof body.title === "string") item.title = body.title.trim();
   if (typeof body.desc === "string") item.desc = body.desc.trim();
   if (typeof body.price === "string") item.price = body.price.trim();
+  if (typeof body.imageCount === "string") item.imageCount = body.imageCount.trim();
+  if (typeof body.features === "string") item.features = body.features;
   if (typeof body.active === "boolean") item.active = body.active;
 
   store.servicesUpdatedAt = new Date().toISOString();

@@ -24,6 +24,8 @@ export type ServiceItem = {
   title: string;
   desc: string;
   price: string; // Freitext, z.B. "ab CHF 250" oder "Abo CHF 90/Monat"
+  imageCount: string; // Freitext, z.B. "30" oder "30-50"
+  features: string; // Haken-Liste, eine Leistung pro Zeile (mit "✓ " Präfix)
   active: boolean; // inaktiv = nicht auf der Website
   order: number;
 };
@@ -54,6 +56,8 @@ const DEFAULT_SERVICES: ServiceItem[] = [
     title: "Porträt & Bewerbung",
     desc: "Porträts mit natürlichem Licht, einzeln oder als kleine Serie, auch für Bewerbung und Profil.",
     price: "",
+    imageCount: "",
+    features: "",
     active: true,
     order: 0,
   },
@@ -62,6 +66,8 @@ const DEFAULT_SERVICES: ServiceItem[] = [
     title: "Events & Feiern",
     desc: "Hochzeiten, Geburtstage, Firmenanlässe: unaufdringlich begleitet, ehrlich festgehalten.",
     price: "",
+    imageCount: "",
+    features: "",
     active: true,
     order: 1,
   },
@@ -70,6 +76,8 @@ const DEFAULT_SERVICES: ServiceItem[] = [
     title: "Auftragsarbeiten",
     desc: "Architektur, Fahrzeuge, Produkte oder Reportagen, nach Absprache vor Ort.",
     price: "",
+    imageCount: "",
+    features: "",
     active: true,
     order: 2,
   },
@@ -78,6 +86,8 @@ const DEFAULT_SERVICES: ServiceItem[] = [
     title: "Fine-Art-Prints",
     desc: "Ausgewählte Motive als hochwertige Drucke, auf Wunsch signiert und gerahmt.",
     price: "",
+    imageCount: "",
+    features: "",
     active: true,
     order: 3,
   },
@@ -101,6 +111,12 @@ export async function readStore(): Promise<Store> {
     if (typeof parsed.settings.weeklyEnabled !== "boolean") parsed.settings.weeklyEnabled = true;
     if (!Array.isArray(parsed.images)) parsed.images = [];
     if (!Array.isArray(parsed.services)) parsed.services = structuredClone(DEFAULT_SERVICES);
+    // Ältere Einträge um neue Felder ergänzen
+    parsed.services = parsed.services.map((s) => ({
+      ...s,
+      imageCount: s.imageCount ?? "",
+      features: s.features ?? "",
+    }));
     if (!parsed.availability) parsed.availability = { ...DEFAULT_AVAILABILITY };
     if (typeof parsed.servicesUpdatedAt !== "string") parsed.servicesUpdatedAt = "";
     return parsed;

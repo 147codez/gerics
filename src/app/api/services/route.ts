@@ -26,6 +26,8 @@ export async function POST() {
     title: "Neue Dienstleistung",
     desc: "",
     price: "",
+    imageCount: "",
+    features: "",
     active: false,
     order: maxOrder + 1,
   };
