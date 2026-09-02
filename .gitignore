@@ -8,3 +8,4 @@ next-env.d.ts
 !/public/uploads/.gitkeep
 /data/store.json
 /uploads-data/
+tsconfig.tsbuildinfo
