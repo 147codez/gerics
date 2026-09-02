@@ -2,15 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import type { CategoryDef } from "@/lib/store";
 
-// Mobile-Menü: Hamburger-Knopf, aufklappbares Panel mit allen Seiten + Kategorien.
+// Mobile-Menü: Hamburger-Knopf, aufklappbares Panel mit allen Seiten.
 export default function MobileNav({
-  categories,
   showServices,
   labels,
 }: {
-  categories: CategoryDef[];
   showServices: boolean;
   labels: { start: string; gallery: string; services: string; about: string };
 }) {
@@ -40,16 +37,6 @@ export default function MobileNav({
             >
               {labels.gallery}
             </Link>
-            {categories.map((c) => (
-              <Link
-                key={c.slug}
-                href={`/galerie/${c.slug}`}
-                onClick={() => setOpen(false)}
-                className="rounded-xl px-4 py-2.5 pl-8 text-sm text-muted hover:bg-[#35322c] hover:text-gold"
-              >
-                {c.label}
-              </Link>
-            ))}
             {showServices ? (
               <Link
                 href="/dienstleistungen"

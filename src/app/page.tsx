@@ -46,16 +46,10 @@ export default async function Home() {
             </h1>
             <p className="mt-7 text-lg leading-relaxed text-ink/90 sm:text-xl">{d.intro}</p>
 
-            <div className="mt-9 flex flex-wrap gap-3">
-              <Link
-                href="/ueber-uns"
-                className="rounded-full bg-gold px-6 py-3 font-medium text-paper transition hover:brightness-105"
-              >
-                {d.aboutBtn}
-              </Link>
+            <div className="mt-9">
               <Link
                 href="/ueber-uns#kontakt"
-                className="rounded-full border border-line px-6 py-3 font-medium text-ink transition hover:border-gold"
+                className="inline-block rounded-full bg-gold px-6 py-3 font-medium text-paper transition hover:brightness-105"
               >
                 {d.contactBtn}
               </Link>
