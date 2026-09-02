@@ -34,10 +34,15 @@ body {
 .discover-line {
   position: relative;
   width: 2px;
-  height: 64px;
+  height: 40px;
   border-radius: 2px;
   background: rgba(226, 201, 143, 0.25);
   overflow: hidden;
+}
+@media (min-width: 640px) {
+  .discover-line {
+    height: 64px;
+  }
 }
 .discover-line::after {
   content: "";

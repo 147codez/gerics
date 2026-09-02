@@ -1,4 +1,3 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
@@ -28,20 +27,12 @@ export default async function GaleriePage() {
 
         <div className="mt-10 space-y-14 sm:mt-14 sm:space-y-16">
           {store.categories.map((c) => {
-            const images = imagesByCategory(store, c.slug).slice(0, 5);
+            const images = imagesByCategory(store, c.slug).slice(0, 4);
             return (
               <div key={c.slug}>
-                <div className="mb-5 flex flex-wrap items-baseline justify-between gap-3">
-                  <h2 className="font-serif text-2xl text-gold sm:text-3xl">{c.label}</h2>
-                  <Link
-                    href={`/galerie/${c.slug}`}
-                    className="rounded-full border border-line px-5 py-2 text-sm text-ink transition hover:border-gold hover:text-gold"
-                  >
-                    {d.galleryPage.more}
-                  </Link>
-                </div>
+                <h2 className="mb-5 font-serif text-2xl text-gold sm:text-3xl">{c.label}</h2>
 
-                {/* 5 feste Slots pro Kategorie, Klick öffnet die Gross-Ansicht */}
+                {/* 4 feste Slots pro Kategorie, Klick öffnet die Gross-Ansicht */}
                 <SlotGrid images={images} comingSoon={d.gallery.comingSoon} alt={c.label} />
               </div>
             );

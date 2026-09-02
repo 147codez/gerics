@@ -324,6 +324,13 @@ export default function Dashboard({
           <a href="/" target="_blank" className="text-muted hover:text-gold">
             Website ansehen ↗
           </a>
+          <a
+            href="/api/backup"
+            title="Alle Bilder + Einstellungen als ZIP herunterladen"
+            className="rounded-lg border border-line px-3 py-1.5 hover:bg-[#35322c]"
+          >
+            Backup herunterladen
+          </a>
           <button onClick={logout} className="rounded-lg border border-line px-3 py-1.5 hover:bg-[#35322c]">
             Abmelden
           </button>
@@ -467,11 +474,11 @@ export default function Dashboard({
           </div>
         </section>
 
-        {/* Galerie-Kategorien: gleiche 5 Slots wie auf der Galerie-Seite */}
+        {/* Galerie-Kategorien: gleiche 4 Slots wie auf der Galerie-Seite */}
         <section className="mt-10">
           <h2 className="font-medium">Galerie-Kategorien</h2>
           <p className="mt-1 text-sm text-muted">
-            Die ersten 5 Bilder pro Kategorie erscheinen als Slots auf der Galerie-Seite. Upload lädt
+            Die ersten 4 Bilder pro Kategorie erscheinen als Slots auf der Galerie-Seite. Upload lädt
             direkt in die Kategorie. Bilder lassen sich per Ziehen umsortieren oder in eine andere
             Kategorie verschieben.
           </p>
@@ -534,8 +541,8 @@ export default function Dashboard({
                       </button>
                     </div>
                   </div>
-                  <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-5">
-                    {Array.from({ length: 5 }).map((_, i) => {
+                  <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                    {Array.from({ length: 4 }).map((_, i) => {
                       const img = catImages[i];
                       return img ? (
                         <div

@@ -8,8 +8,9 @@ const EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
 // Cover-Flow: 3D-Karussell wie früher in iTunes. Seitliche Bilder sind gekippt,
 // Klick holt sie in die Mitte. Mit Spiegelung nach unten.
 export default function CoverFlow({ images }: { images: ImageItem[] }) {
-  const pics = images.slice(0, 9);
-  const [cur, setCur] = useState(Math.floor(pics.length / 2));
+  const pics = images.slice(0, 15);
+  const mid = Math.floor(pics.length / 2);
+  const [cur, setCur] = useState(mid);
 
   if (pics.length === 0) return <p className="text-sm text-muted">Noch keine Bilder im Ordner.</p>;
 
@@ -51,24 +52,33 @@ export default function CoverFlow({ images }: { images: ImageItem[] }) {
           );
         })}
       </div>
-      <div className="mt-4 flex items-center justify-center gap-4 text-sm text-muted">
-        <button
-          onClick={() => setCur((c) => Math.max(0, c - 1))}
-          aria-label="Zurück"
-          className="rounded-full border border-line px-4 py-1.5 transition hover:border-gold hover:text-gold"
-        >
-          ←
-        </button>
-        <span>
+      <div className="mt-4 flex flex-col items-center gap-3 text-sm text-muted">
+        <div className="flex items-center justify-center gap-3">
+          <button
+            onClick={() => setCur((c) => Math.max(0, c - 1))}
+            aria-label="Zurück"
+            className="rounded-full border border-line px-5 py-2 transition hover:border-gold hover:text-gold"
+          >
+            ← Zurück
+          </button>
+          <button
+            onClick={() => setCur(mid)}
+            aria-label="Zur Mitte"
+            className="rounded-full border border-line px-5 py-2 transition hover:border-gold hover:text-gold"
+          >
+            Mitte
+          </button>
+          <button
+            onClick={() => setCur((c) => Math.min(pics.length - 1, c + 1))}
+            aria-label="Vorwärts"
+            className="rounded-full border border-line px-5 py-2 transition hover:border-gold hover:text-gold"
+          >
+            Vorwärts →
+          </button>
+        </div>
+        <span className="tabular-nums">
           {cur + 1} / {pics.length}
         </span>
-        <button
-          onClick={() => setCur((c) => Math.min(pics.length - 1, c + 1))}
-          aria-label="Weiter"
-          className="rounded-full border border-line px-4 py-1.5 transition hover:border-gold hover:text-gold"
-        >
-          →
-        </button>
       </div>
     </div>
   );

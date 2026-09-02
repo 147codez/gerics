@@ -50,7 +50,7 @@ export default function FlickrStats({ stats }: { stats: Stat[] }) {
   }, []);
 
   return (
-    <dl ref={ref} className="grid grid-cols-2 gap-x-6 gap-y-6">
+    <dl ref={ref} className="grid grid-cols-2 gap-x-6 gap-y-6 text-center">
       {stats.map((s) => (
         <div key={s.label}>
           <dt className="font-serif text-3xl tabular-nums text-[#3f3526] sm:text-4xl">

@@ -39,7 +39,7 @@ export default async function Home() {
           <div className="absolute inset-0 bg-gradient-to-r from-[#2a2723] via-[#2a2723]/80 to-[#2a2723]/20" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#2a2723]/90 via-transparent to-transparent" />
 
-          <div className="relative flex min-h-[calc(100vh-6.75rem)] max-w-2xl flex-col justify-center px-6 py-16 sm:px-12">
+          <div className="relative flex min-h-[calc(100svh-6.75rem)] max-w-2xl flex-col justify-center px-6 pb-36 pt-16 sm:px-12 sm:py-16">
             <p className="text-sm uppercase tracking-brand text-muted">{d.eyebrow}</p>
             <h1 className="mt-5 font-serif text-5xl leading-[1.05] text-gold sm:text-6xl lg:text-7xl">
               {d.headline}
@@ -66,9 +66,9 @@ export default async function Home() {
           <a
             href="#galerie"
             aria-label={d.discover}
-            className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2.5 text-gold transition hover:opacity-80"
+            className="absolute bottom-5 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2 sm:bottom-6 sm:gap-2.5 text-gold transition hover:opacity-80"
           >
-            <span className="text-base font-medium uppercase tracking-[0.22em] sm:text-lg">
+            <span className="text-sm font-medium uppercase tracking-[0.22em] sm:text-lg">
               {d.discover}
             </span>
             <span className="discover-line" aria-hidden />

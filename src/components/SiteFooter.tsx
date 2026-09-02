@@ -36,7 +36,7 @@ export default function SiteFooter({ lang }: { lang: Lang }) {
           >
             {d.footer.builtBy}
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/147codez-logo.png" alt="147codez" className="h-5 w-auto" />
+            <img src="/147codez-logo.png?v=gold" alt="147codez" className="h-6 w-auto" />
           </a>
         </div>
       </div>

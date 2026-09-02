@@ -94,7 +94,7 @@ export const dict: Record<Lang, Dict> = {
     nav: { start: "Start", gallery: "Galerie", services: "Dienstleistungen", about: "Über uns", contact: "Kontakt" },
     services: {
       title: "Dienstleistungen",
-      sub: "Vom Porträt bis zum Print. Wählen Sie ein Angebot und senden Sie eine Anfrage, ich melde mich persönlich mit Termin und Details.",
+      sub: "Vom Porträt bis zum Print. Wähl ein Angebot und sende eine Anfrage, ich melde mich persönlich mit Termin und Details.",
       items: [
         {
           h: "Porträt & Bewerbung",
@@ -122,13 +122,13 @@ export const dict: Record<Lang, Dict> = {
       invalidDay: "An diesem Tag nicht verfügbar, bitte anderes Datum wählen.",
       dayNames: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
       imagesLabel: "Bilder",
-      fullyBooked: "Zurzeit ausgebucht. Schauen Sie bald wieder vorbei oder schreiben Sie an info@gerics.ch.",
+      fullyBooked: "Zurzeit ausgebucht. Schau bald wieder vorbei oder schreib an info@gerics.ch.",
       note: "Unverbindliche Anfrage, ich melde mich persönlich zurück.",
     },
     categories: { sport: "Sport", fahrzeuge: "Fahrzeuge", natur: "Natur", architektur: "Architektur" },
     galleryPage: {
       title: "Galerie",
-      sub: "Vier Themen, ein Blick. Ausgewählte Bilder pro Kategorie.",
+      sub: "Ausgewählte Bilder, nach Themen geordnet.",
       more: "Mehr ansehen →",
       catSub: "Alle Bilder dieser Kategorie.",
       back: "← Zur Galerie",
@@ -141,9 +141,9 @@ export const dict: Record<Lang, Dict> = {
     home: {
       tagline: "Fotografie seit über 30 Jahren",
       eyebrow: "Herzlich willkommen",
-      headline: "Schön, dass Sie da sind.",
+      headline: "Schön, dass Du da bist.",
       intro:
-        "Seit über 30 Jahren fange ich Licht, Menschen und Momente ein. Kein Effekt, kein Lärm, nur das Bild, das bleibt. Nehmen Sie sich einen Moment und schauen Sie sich um.",
+        "Seit über 30 Jahren fange ich Licht, Menschen und Momente ein. Kein Effekt, kein Lärm, nur das Bild, das bleibt. Nimm Dir einen Moment und schau Dich um.",
       aboutBtn: "Über mich",
       contactBtn: "Kontakt aufnehmen",
       galleryTitle: "Ausgewählte Bilder",
@@ -172,16 +172,16 @@ export const dict: Record<Lang, Dict> = {
       storyTitle: "Niemals vergessen, wer du bist.",
       storyAlt: "Zeitungsartikel über Mahmoud Geri Geranmayeh",
       contactTitle: "Kontakt",
-      contactText: "Schreiben Sie mir, ich melde mich persönlich zurück.",
+      contactText: "Schreib mir, ich melde mich persönlich zurück.",
       form: {
         firstName: "Vorname",
         lastName: "Name",
         email: "E-Mail",
         phone: "Telefon",
-        message: "Ihr Anliegen",
+        message: "Dein Anliegen",
         send: "Absenden",
         sending: "Wird gesendet …",
-        success: "Danke, Ihre Nachricht ist unterwegs. Ich melde mich bald.",
+        success: "Danke, Deine Nachricht ist unterwegs. Ich melde mich bald.",
         error: "Da ging etwas schief. Bitte später erneut versuchen oder direkt an info@gerics.ch schreiben.",
       },
     },
@@ -219,19 +219,19 @@ export const dict: Record<Lang, Dict> = {
           },
           {
             h: "Welche Daten wir bearbeiten",
-            p: "Diese Website nutzt Google Analytics (Google Ireland Ltd.) zur anonymisierten Auswertung von Besucherzahlen und Seitenaufrufen, um das Angebot zu verbessern. Dabei werden technische Daten (z. B. gekürzte IP-Adresse, Browsertyp, Gerät, aufgerufene Seiten) verarbeitet und an Google übertragen, teils in die USA. Weitere personenbezogene Daten entstehen nur, wenn Sie uns per E-Mail kontaktieren; diese verwenden wir ausschliesslich zur Beantwortung Ihrer Anfrage.",
+            p: "Diese Website nutzt Google Analytics (Google Ireland Ltd.) zur anonymisierten Auswertung von Besucherzahlen und Seitenaufrufen, um das Angebot zu verbessern. Dabei werden technische Daten (z. B. gekürzte IP-Adresse, Browsertyp, Gerät, aufgerufene Seiten) verarbeitet und an Google übertragen, teils in die USA. Weitere personenbezogene Daten entstehen nur, wenn Du uns per E-Mail kontaktierst; diese verwenden wir ausschliesslich zur Beantwortung Deiner Anfrage.",
           },
           {
             h: "Cookies",
-            p: "Für Ihre Sprachwahl (Deutsch/Englisch) wird ein technisch notwendiges Cookie gesetzt. Google Analytics setzt zusätzlich Cookies zur Reichweitenmessung. Sie können Cookies in Ihrem Browser jederzeit blockieren oder löschen; die Erfassung durch Google lässt sich zudem mit dessen Browser-Add-on unterbinden.",
+            p: "Für Deine Sprachwahl (Deutsch/Englisch) wird ein technisch notwendiges Cookie gesetzt. Google Analytics setzt zusätzlich Cookies zur Reichweitenmessung. Du kannst Cookies in Deinem Browser jederzeit blockieren oder löschen; die Erfassung durch Google lässt sich zudem mit dessen Browser-Add-on unterbinden.",
           },
           {
             h: "Server-Protokolle",
             p: "Beim Aufruf der Website kann der Hosting-Anbieter technische Zugriffsdaten (z. B. IP-Adresse, Zeitpunkt, abgerufene Seite) protokollieren. Diese dienen dem sicheren Betrieb und werden nicht mit anderen Daten zusammengeführt.",
           },
           {
-            h: "Ihre Rechte",
-            p: "Sie haben das Recht auf Auskunft, Berichtigung und Löschung Ihrer gespeicherten Daten. Wenden Sie sich dazu an info@gerics.ch.",
+            h: "Deine Rechte",
+            p: "Du hast das Recht auf Auskunft, Berichtigung und Löschung Deiner gespeicherten Daten. Wende Dich dazu an info@gerics.ch.",
           },
         ],
       },
@@ -275,7 +275,7 @@ export const dict: Record<Lang, Dict> = {
     categories: { sport: "Sports", fahrzeuge: "Vehicles", natur: "Nature", architektur: "Architecture" },
     galleryPage: {
       title: "Gallery",
-      sub: "Four themes, one eye. Selected images per category.",
+      sub: "Selected images, sorted by theme.",
       more: "See more →",
       catSub: "All images in this category.",
       back: "← Back to gallery",

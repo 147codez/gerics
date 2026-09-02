@@ -4,9 +4,9 @@ import { useState } from "react";
 import type { ImageItem } from "@/lib/store";
 import Lightbox from "./Lightbox";
 
-const SLOTS = 5;
+const SLOTS = 4;
 
-// 5 feste Slots einer Kategorie auf der Galerie-Übersicht.
+// 4 feste Slots einer Kategorie auf der Galerie-Übersicht.
 // Klick auf ein Bild öffnet die sanfte Gross-Ansicht, leere Slots sind Platzhalter.
 export default function SlotGrid({
   images,
@@ -20,7 +20,7 @@ export default function SlotGrid({
   const [big, setBig] = useState<ImageItem | null>(null);
 
   return (
-    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+    <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
       {Array.from({ length: SLOTS }).map((_, i) => {
         const img = images[i];
         return img ? (
