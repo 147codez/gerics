@@ -1,3 +1,4 @@
+import ScrollToHash from "@/components/ScrollToHash";
 import type { Metadata } from "next";
 import "./globals.css";
 import { SITE_NAME, GA_ID } from "@/lib/site";
@@ -17,6 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang={lang}>
       <body className="font-sans antialiased">
+        <ScrollToHash />
         {children}
         {GA_ID ? (
           <>

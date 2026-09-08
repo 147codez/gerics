@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
 import crypto from "crypto";
-import { readStore, writeStore, sortedImages, type ImageItem } from "@/lib/store";
+import { readStore, writeStore, sortedImages, CAROUSEL_MAX, type ImageItem } from "@/lib/store";
 import { isAuthed } from "@/lib/auth";
 import { UPLOADS_DIR, mediaUrl } from "@/lib/uploads";
 
@@ -31,6 +31,7 @@ export async function POST(req: Request) {
   const w = Number(form.get("w") || 0);
   const h = Number(form.get("h") || 0);
   const categoryRaw = String(form.get("category") || "");
+  const toCarousel = String(form.get("carousel") || "") === "1"; // direkt ins Startseiten-Karussell
 
   if (!(file instanceof File)) {
     return NextResponse.json({ error: "Keine Datei" }, { status: 400 });
@@ -59,6 +60,7 @@ export async function POST(req: Request) {
     category: store.categories.some((c) => c.slug === categoryRaw) ? categoryRaw : "",
   };
   store.images.push(item);
+  if (toCarousel && store.carousel.length < CAROUSEL_MAX) store.carousel.push(id);
   await writeStore(store);
 
   return NextResponse.json(item, { status: 201 });

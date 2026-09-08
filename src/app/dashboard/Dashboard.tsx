@@ -13,6 +13,7 @@ type Props = {
   thisWeekIds: string[];
   nextWeekIds: string[];
   initialCategories: CategoryDef[];
+  initialCarousel: string[]; // Bild-IDs des Startseiten-Karussells in Reihenfolge
   initialServices: ServiceItem[];
   initialAvailability: Availability;
   initialServicesEnabled: boolean;
@@ -54,6 +55,7 @@ export default function Dashboard({
   thisWeekIds,
   nextWeekIds,
   initialCategories,
+  initialCarousel,
   initialServices,
   initialAvailability,
   initialServicesEnabled,
@@ -71,6 +73,8 @@ export default function Dashboard({
   const [newCat, setNewCat] = useState("");
   const services = initialServices;
   const cats = initialCategories;
+  const CAROUSEL_MAX = 15;
+  const carouselIds = initialCarousel;
 
   const images = initialImages;
   const mode = initialMode;
@@ -78,7 +82,7 @@ export default function Dashboard({
   const thisWeek = new Set(thisWeekIds);
   const nextWeek = new Set(nextWeekIds);
 
-  async function handleFiles(files: FileList | null, category = "") {
+  async function handleFiles(files: FileList | null, category = "", toCarousel = false) {
     if (!files || files.length === 0) return;
     setBusy(true);
     setMsg(`Lade ${files.length} Bild(er) hoch ...`);
@@ -90,6 +94,7 @@ export default function Dashboard({
       fd.append("h", String(h));
       fd.append("title", "");
       fd.append("category", category);
+      if (toCarousel) fd.append("carousel", "1");
       const res = await fetch("/api/images", { method: "POST", body: fd });
       if (!res.ok) {
         setMsg("Fehler beim Hochladen.");
@@ -174,6 +179,43 @@ export default function Dashboard({
     arr.splice(from, 1);
     arr.splice(to, 0, dragged);
     await reorder(arr.map((i) => i.id));
+  }
+
+  // --- Startseiten-Karussell (max. 15 Bilder, eigene Reihenfolge) ---
+  async function saveCarousel(ids: string[]) {
+    setBusy(true);
+    await fetch("/api/carousel", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ids }),
+    });
+    setBusy(false);
+    router.refresh();
+  }
+
+  // Drop auf einen Karussell-Slot: im Karussell = umsortieren, von aussen = einfügen
+  // (bei vollem Karussell ersetzt es das Bild im Ziel-Slot).
+  async function dropOnCarousel(slotIndex: number) {
+    const dragged = images.find((i) => i.id === dragId);
+    setDragId(null);
+    if (!dragged) return;
+    const ids = [...carouselIds];
+    const from = ids.indexOf(dragged.id);
+    if (from !== -1) {
+      if (from === slotIndex) return;
+      ids.splice(from, 1);
+      ids.splice(Math.min(slotIndex, ids.length), 0, dragged.id);
+    } else if (ids.length >= CAROUSEL_MAX && slotIndex < ids.length) {
+      ids[slotIndex] = dragged.id;
+    } else {
+      ids.splice(Math.min(slotIndex, ids.length), 0, dragged.id);
+      if (ids.length > CAROUSEL_MAX) ids.length = CAROUSEL_MAX;
+    }
+    await saveCarousel(ids);
+  }
+
+  function removeFromCarousel(id: string) {
+    saveCarousel(carouselIds.filter((x) => x !== id));
   }
 
   // Drop-Ziel in der Gesamtliste: globale Reihenfolge ändern.
@@ -615,6 +657,107 @@ export default function Dashboard({
                 </div>
               );
             })}
+          </div>
+        </section>
+
+        {/* Startseiten-Karussell: 15 Slots, eigene Auswahl + Reihenfolge */}
+        <section className="mt-10">
+          <h2 className="font-medium">Karussell auf der Startseite</h2>
+          <p className="mt-1 text-sm text-muted">
+            Bis zu 15 Bilder in dieser Reihenfolge. Hochladen lädt direkt ins Karussell. Bilder aus
+            den Kategorien oder aus „Alle Bilder" per Ziehen in einen Slot legen, per Ziehen umsortieren,
+            ✕ nimmt ein Bild aus dem Karussell (bleibt im Ordner). Ist das Karussell leer, zeigt die
+            Startseite automatisch die ersten 15 Bilder des Ordners.
+          </p>
+          <div className="mt-4 rounded-2xl border border-line bg-[#312d27] p-4 sm:p-5">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <h3 className="font-medium">
+                Karussell <span className="text-xs text-muted">({carouselIds.length} / {CAROUSEL_MAX})</span>
+              </h3>
+              <label
+                className={`cursor-pointer rounded-lg bg-gold px-4 py-2 text-sm text-paper ${
+                  busy || carouselIds.length >= CAROUSEL_MAX ? "opacity-60" : "hover:brightness-105"
+                }`}
+              >
+                Bilder hochladen
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  hidden
+                  disabled={busy || carouselIds.length >= CAROUSEL_MAX}
+                  onChange={async (e) => {
+                    const el = e.currentTarget;
+                    await handleFiles(el.files, "", true);
+                    el.value = "";
+                  }}
+                />
+              </label>
+            </div>
+            <div className="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-5">
+              {Array.from({ length: CAROUSEL_MAX }).map((_, i) => {
+                const img = images.find((x) => x.id === carouselIds[i]);
+                return img ? (
+                  <div
+                    key={img.id}
+                    style={{ aspectRatio: "1 / 1" }}
+                    draggable
+                    onDragStart={(e) => {
+                      setDragId(img.id);
+                      e.dataTransfer.effectAllowed = "move";
+                    }}
+                    onDragEnd={() => setDragId(null)}
+                    onDragOver={(e) => e.preventDefault()}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      dropOnCarousel(i);
+                    }}
+                    className={`group relative cursor-grab overflow-hidden rounded-xl border bg-[#35322c] ${
+                      dragId && dragId !== img.id ? "border-gold/60" : "border-line"
+                    }`}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={img.file} alt={img.title || ""} draggable={false} className="h-full w-full object-cover" />
+                    <span className="absolute left-1.5 top-1.5 rounded-md bg-black/55 px-1.5 py-0.5 text-xs text-white backdrop-blur-sm">
+                      {i + 1}
+                    </span>
+                    <div className="absolute right-1.5 top-1.5 flex gap-1 opacity-0 transition focus-within:opacity-100 group-hover:opacity-100">
+                      <button
+                        onClick={() => setEditing(img)}
+                        disabled={busy}
+                        title="Zuschneiden / Format / Auflösung"
+                        className="rounded-lg bg-black/55 px-2 py-1 text-sm text-white backdrop-blur-sm hover:bg-black/75"
+                      >
+                        ✎
+                      </button>
+                      <button
+                        onClick={() => removeFromCarousel(img.id)}
+                        disabled={busy}
+                        title="Aus dem Karussell nehmen (Bild bleibt im Ordner)"
+                        className="rounded-lg bg-black/55 px-2 py-1 text-sm text-white backdrop-blur-sm hover:bg-red-900/80"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div
+                    key={`slot-${i}`}
+                    style={{ aspectRatio: "1 / 1" }}
+                    onDragOver={(e) => e.preventDefault()}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      dropOnCarousel(i);
+                    }}
+                    className={`flex items-center justify-center rounded-xl border border-dashed text-xs text-muted ${
+                      dragId ? "border-gold/60 text-gold" : "border-line/60"
+                    }`}
+                  >
+                    {dragId ? "Hierhin ziehen" : `Slot ${i + 1}`}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </section>
 

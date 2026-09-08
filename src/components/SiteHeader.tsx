@@ -17,7 +17,7 @@ export default async function SiteHeader({ lang }: { lang: Lang }) {
         <Link href="/" className="text-lg font-semibold uppercase tracking-brand text-gold">
           {SITE_NAME}
         </Link>
-        <div className="flex items-center gap-4 text-base text-muted sm:gap-7 md:text-lg">
+        <div className="flex items-center gap-4 text-lg text-muted sm:gap-7 md:text-xl">
           {/* Desktop-Navigation */}
           <nav className="hidden items-center gap-5 md:flex lg:gap-7">
             <Link href="/" className="hover:text-gold">

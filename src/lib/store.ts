@@ -58,6 +58,9 @@ export type Store = {
   settings: { mode: SelectionMode; weeklyEnabled: boolean; servicesEnabled: boolean };
   images: ImageItem[];
   categories: CategoryDef[];
+  // carousel: Bild-IDs für das Karussell auf der Startseite, in Reihenfolge, max. 15.
+  // Leer = automatisch die ersten 15 Bilder des Ordners.
+  carousel: string[];
   services: ServiceItem[];
   availability: Availability;
   servicesUpdatedAt: string; // ISO-Zeitpunkt der letzten CMS-Änderung ("Gespeichert")
@@ -122,6 +125,7 @@ const EMPTY: Store = {
   settings: { mode: "rotate", weeklyEnabled: true, servicesEnabled: false },
   images: [],
   categories: DEFAULT_CATEGORIES,
+  carousel: [],
   services: DEFAULT_SERVICES,
   availability: DEFAULT_AVAILABILITY,
   servicesUpdatedAt: "",
@@ -138,6 +142,10 @@ export async function readStore(): Promise<Store> {
     if (!Array.isArray(parsed.categories) || parsed.categories.length === 0) {
       parsed.categories = structuredClone(DEFAULT_CATEGORIES);
     }
+    if (!Array.isArray(parsed.carousel)) parsed.carousel = [];
+    parsed.carousel = parsed.carousel.filter(
+      (id, i, arr) => typeof id === "string" && arr.indexOf(id) === i && parsed.images.some((img) => img.id === id)
+    );
     if (!Array.isArray(parsed.services)) parsed.services = structuredClone(DEFAULT_SERVICES);
     // Ältere Einträge um neue Felder ergänzen
     parsed.services = parsed.services.map((s) => ({
@@ -161,6 +169,18 @@ export async function writeStore(store: Store): Promise<void> {
 // Bilder immer nach order sortiert zurückgeben.
 export function sortedImages(store: Store): ImageItem[] {
   return [...store.images].sort((a, b) => a.order - b.order);
+}
+
+export const CAROUSEL_MAX = 15;
+
+// Bilder für das Startseiten-Karussell: die im Dashboard gewählten (in Reihenfolge),
+// sonst als Ausweich die ersten 15 des Ordners.
+export function carouselImages(store: Store): ImageItem[] {
+  const chosen = store.carousel
+    .map((id) => store.images.find((i) => i.id === id))
+    .filter((i): i is ImageItem => !!i)
+    .slice(0, CAROUSEL_MAX);
+  return chosen.length > 0 ? chosen : sortedImages(store).slice(0, CAROUSEL_MAX);
 }
 
 // Alle Bilder einer Kategorie (Slug), nach order sortiert.

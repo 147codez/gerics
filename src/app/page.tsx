@@ -4,7 +4,7 @@ import SiteFooter from "@/components/SiteFooter";
 import Gallery from "@/components/Gallery";
 import CoverFlow from "@/components/demos/CoverFlow";
 import FlickrCard from "@/components/FlickrCard";
-import { readStore, sortedImages } from "@/lib/store";
+import { readStore, sortedImages, carouselImages } from "@/lib/store";
 import { selectWeekly } from "@/lib/rotation";
 import { t } from "@/lib/i18n";
 import { getLang } from "@/lib/lang";
@@ -17,6 +17,7 @@ export default async function Home() {
   const store = await readStore();
   const images = sortedImages(store);
   const weekly = selectWeekly(images, store.settings.mode);
+  const carousel = carouselImages(store);
 
   return (
     <main className="min-h-screen">
@@ -81,10 +82,10 @@ export default async function Home() {
         </section>
       ) : null}
 
-      {/* Cover-Flow-Karussell über alle Bilder */}
-      {images.length > 0 ? (
+      {/* Cover-Flow-Karussell: im Dashboard gewählte Bilder (max. 15) */}
+      {carousel.length > 0 ? (
         <section className="mx-auto max-w-[1500px] px-5 sm:px-8 pb-20">
-          <CoverFlow images={images} />
+          <CoverFlow images={carousel} />
         </section>
       ) : null}
 

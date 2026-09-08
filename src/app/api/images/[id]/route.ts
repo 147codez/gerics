@@ -15,6 +15,7 @@ export async function DELETE(_req: Request, { params }: { params: { id: string }
   if (!img) return NextResponse.json({ error: "Nicht gefunden" }, { status: 404 });
 
   store.images = store.images.filter((i) => i.id !== params.id);
+  store.carousel = store.carousel.filter((id) => id !== params.id);
   await writeStore(store);
 
   // Datei aus dem Upload-Ordner entfernen.

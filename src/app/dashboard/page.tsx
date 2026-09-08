@@ -23,6 +23,7 @@ export default async function DashboardPage() {
       thisWeekIds={thisWeek}
       nextWeekIds={nextWeek}
       initialCategories={store.categories}
+      initialCarousel={store.carousel}
       initialServicesEnabled={store.settings.servicesEnabled}
       initialServices={sortedServices(store)}
       initialAvailability={store.availability}

@@ -27,13 +27,13 @@ export default function MobileNav({
       {open ? (
         <div className="absolute left-0 right-0 top-full z-50 mt-2 px-4">
           <nav className="flex flex-col rounded-2xl border border-line/70 bg-[#2a2723]/95 p-3 shadow-[0_12px_35px_rgba(0,0,0,0.5)] backdrop-blur-md">
-            <Link href="/" onClick={() => setOpen(false)} className="rounded-xl px-4 py-3 hover:bg-[#35322c]">
+            <Link href="/" onClick={() => setOpen(false)} className="rounded-xl px-4 py-3 text-lg hover:bg-[#35322c]">
               {labels.start}
             </Link>
             <Link
               href="/galerie"
               onClick={() => setOpen(false)}
-              className="rounded-xl px-4 py-3 hover:bg-[#35322c]"
+              className="rounded-xl px-4 py-3 text-lg hover:bg-[#35322c]"
             >
               {labels.gallery}
             </Link>
@@ -41,7 +41,7 @@ export default function MobileNav({
               <Link
                 href="/dienstleistungen"
                 onClick={() => setOpen(false)}
-                className="rounded-xl px-4 py-3 hover:bg-[#35322c]"
+                className="rounded-xl px-4 py-3 text-lg hover:bg-[#35322c]"
               >
                 {labels.services}
               </Link>
@@ -49,7 +49,7 @@ export default function MobileNav({
             <Link
               href="/ueber-uns"
               onClick={() => setOpen(false)}
-              className="rounded-xl px-4 py-3 hover:bg-[#35322c]"
+              className="rounded-xl px-4 py-3 text-lg hover:bg-[#35322c]"
             >
               {labels.about}
             </Link>
