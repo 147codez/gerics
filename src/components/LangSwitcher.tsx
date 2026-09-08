@@ -12,7 +12,7 @@ export default function LangSwitcher({ current }: { current: Lang }) {
   }
 
   return (
-    <div className="flex items-center gap-2 text-sm">
+    <div className="flex items-center gap-2 text-base md:text-lg">
       {LANGS.map((l, i) => (
         <span key={l} className="flex items-center gap-2">
           {i > 0 ? <span className="text-line">·</span> : null}
