@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 
 // Sorgt dafür, dass Links zuverlässig am Ziel landen:
 // - Link mit #anker (z.B. /ueber-uns#kontakt) scrollt zum Abschnitt, auch nach Seitenwechsel
-// - Link ohne Anker (z.B. "Über uns" in der Navbar) scrollt an den Seitenanfang
+// - Link ohne Anker (z.B. "Über mich" in der Navbar) scrollt an den Seitenanfang
 // Bei Browser-Zurück/Vorwärts wird nichts gemacht, damit die Scroll-Position erhalten bleibt.
 export default function ScrollToHash() {
   const pathname = usePathname();
@@ -40,7 +40,7 @@ export default function ScrollToHash() {
       t = setTimeout(go, 80);
     }
 
-    // Klick auf einen Link derselben Seite (z.B. #kontakt -> "Über uns" ohne Anker):
+    // Klick auf einen Link derselben Seite (z.B. #kontakt -> "Über mich" ohne Anker):
     // Next.js löst dabei keinen Seitenwechsel aus, darum hier selbst scrollen.
     const onClick = (e: MouseEvent) => {
       const a = (e.target as HTMLElement | null)?.closest("a");

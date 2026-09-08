@@ -91,7 +91,7 @@ type Dict = {
 
 export const dict: Record<Lang, Dict> = {
   de: {
-    nav: { start: "Start", gallery: "Galerie", services: "Dienstleistungen", about: "Über uns", contact: "Kontakt" },
+    nav: { start: "Start", gallery: "Galerie", services: "Dienstleistungen", about: "Über mich", contact: "Kontakt" },
     services: {
       title: "Dienstleistungen",
       sub: "Vom Porträt bis zum Print. Wähl ein Angebot und sende eine Anfrage, ich melde mich persönlich mit Termin und Details.",
@@ -136,7 +136,7 @@ export const dict: Record<Lang, Dict> = {
     meta: {
       homeTitle: "Fotografie seit über 30 Jahren",
       homeDesc: "Fotografie seit über 30 Jahren.",
-      aboutTitle: "Über uns",
+      aboutTitle: "Über mich",
     },
     home: {
       tagline: "Fotografie seit über 30 Jahren",
